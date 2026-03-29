@@ -1,5 +1,9 @@
-// GalleryView.swift
-// MentorDex — Mentor Card Gallery
+//
+//  GalleryView.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import SwiftUI
 
@@ -34,6 +38,7 @@ struct GalleryView: View {
                             ForEach(gameState.gallery) { entry in
                                 GalleryThumbnail(entry: entry)
                                     .onTapGesture {
+                                        playSound("click")
                                         if entry.isUnlocked {
                                             selectedEntry = entry
                                         }
@@ -82,20 +87,18 @@ struct GalleryView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
-                        .padding(.bottom, 20)
-                        
-                        Spacer()
+                        .padding(.bottom, 50)
                         
                         // 4. Kartu Mentor Pokemon Raksasa
                         MentorCardFront(mentor: entry.mentor, grade: entry.grade)
                             .scaleEffect(0.9)
-                            .frame(width: 400 * 0.9, height: 550 * 0.9)
+                            .frame(width: 400 * 0.9, height: 650  * 0.9)
                         
                         Spacer()
                     }
                 }
                 // Atur detent ke 85% layar agar terlihat elegan dan proporsional
-                .presentationDetents([.fraction(0.85)])
+                .presentationDetents([.fraction(0.9)])
                 .presentationCornerRadius(40)
                 .presentationDragIndicator(.hidden)
             }
@@ -111,7 +114,7 @@ struct GalleryView: View {
                     .font(.custom("Fredoka-Bold", size: 32))
                     .foregroundColor(Color.textPrimary)
                 
-                Text("\(gameState.unlockedCount) of 18 cards collected")
+                Text("\(gameState.unlockedCount) of 19 cards collected")
                     .font(.custom("Fredoka-Regular", size: 16))
                     .foregroundColor(Color.textSecondary)
             }
@@ -136,7 +139,7 @@ struct GalleryView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7), value: gameState.unlockedCount)
                 
-                Text("\(Int(Double(gameState.unlockedCount) / Double(18.0) * 100))%")
+                Text("\(Int(Double(gameState.unlockedCount) / Double(19.0) * 100))%")
                     .font(.custom("Fredoka-Bold", size: 15))
                     .foregroundColor(Color.textPrimary)
             }
@@ -182,20 +185,20 @@ struct GalleryView: View {
         private var cardBg: Color {
             if !entry.isUnlocked { return Color.white.opacity(0.5) }
             if entry.grade == .legendary { return Color(hex: "#FFF8E1") }
-            return entry.grade == .epic ? Color(hex: "#FFFEF0") : Color.white
+            return entry.grade == .epic ? Color(hex: "#FDF4FF") : Color.white
         }
         
         private var borderColor: Color {
             if !entry.isUnlocked { return Color(hex: "#82BBDD").opacity(0.3) }
-            if entry.grade == .legendary { return Color(hex: "#FCA048") } // Orange Gold
-            return entry.grade == .epic ? Color(hex: "#FFB800") : Color(hex: "#A7E2FF")
+            if entry.grade == .legendary { return Color(hex: "#FCA048") }
+            return entry.grade == .epic ? Color.epiccard : Color(hex: "#A7E2FF")
         }
         
         private var shadowColor: Color {
             if !entry.isUnlocked { return Color(hex: "#82BBDD").opacity(0.1) }
             if entry.grade == .legendary { return Color(hex: "#FFD700").opacity(0.5) }
             return entry.grade == .epic
-            ? Color(hex: "#FFD700").opacity(0.3)
+            ? Color(hex: "#FDF4FF").opacity(0.3)
             : Color(hex: "#82BBDD").opacity(0.2)
         }
         
@@ -204,8 +207,8 @@ struct GalleryView: View {
             VStack(spacing: 8) {
                 Image(systemName: "lock.fill")
                     .font(.system(size: 24))
-                    .foregroundColor(Color(hex: "#A7E2FF"))
-                Text("\(entry.mentor.name)")
+                    .foregroundColor(Color.textSecondary)
+                Text(entry.mentor.nickname)
                     .font(.custom("Fredoka-Bold", size: 14))
                     .foregroundColor(Color(hex: "#82BBDD"))
                     .multilineTextAlignment(.center)
@@ -215,7 +218,7 @@ struct GalleryView: View {
         // MARK: — Unlocked State
         private var unlockedContent: some View {
             VStack(spacing: 6) {
-                if entry.grade == .epic || entry.grade == .legendary {
+                if entry.grade == .legendary {
                     HStack {
                         Spacer()
                         Image(systemName: "sparkles")
@@ -232,24 +235,26 @@ struct GalleryView: View {
                     Circle()
                         .fill(Color(hex: entry.mentor.accentColor).opacity(0.2))
                         .frame(width: 58, height: 58)
-                    Image(systemName: entry.mentor.photoSystemName)
+                    Image(entry.mentor.mentorImage)
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 32, height: 32)
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
                         .foregroundColor(Color(hex: entry.mentor.accentColor))
-                }
+                        .clipShape(Circle())
+                }.padding(.bottom, 3)
                 
                 VStack(spacing: 2) {
-                    Text(entry.mentor.name.components(separatedBy: " ").first ?? "")
-                        .font(.custom("Fredoka-Bold", size: 14))
+                    Text(entry.mentor.nickname)
+                        .font(.custom("Fredoka-Bold", size: 16))
                         .foregroundColor(Color.textPrimary)
                         .lineLimit(1)
-                    
-                    Text(entry.mentor.role)
-                        .font(.custom("Fredoka-Regular", size: 10))
+        
+                    Text(entry.mentor.role.contains("Product") ? "Product & Growth \n Mentor" : entry.mentor.role)
+                        .font(.custom("Fredoka-Regular", size: 11))
                         .foregroundColor(Color.textSecondary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal, 6)
                 

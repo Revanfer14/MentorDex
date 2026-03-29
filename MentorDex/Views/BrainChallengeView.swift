@@ -1,6 +1,9 @@
-// BrainChallengeView.swift
-// MentorDex — Brain (Quiz) Challenge
-// Uses Apple Intelligence on-device AI & Native Math
+//
+//  BrainChallengeView.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import SwiftUI
 import FoundationModels
@@ -66,16 +69,15 @@ class QuizService: ObservableObject {
         
         let instructions = systemInstructions(tier: tier)
         let topicSeed = [
-            "Geography", "History", "Science", "Space", "Animals",
-            "Computer Science History", "Apple Innovations", "Video Games", "Internet History",
-            "Movies & Cinema", "K-Dramas & Korean Culture", "Pop Music",
-            "World Mythology", "Human Anatomy", "Famous Inventions", "World Landmarks"
+            "Science", "Space", "Animals", "Computer Science History", "Apple Innovations", "Video Games",
+            "Movies", "Korean Dramas", "Music", "World Landmarks", "Anime", "Music Artist", "Celebrities"
         ].randomElement()!
         
         // Membatasi keliaran AI
         let userPrompt = """
-        Generate a Tier \(tier.rawValue) trivia question about \(topicSeed). 
-        Focus on mainstream facts, pop culture, or common history. Do not make it overly academic.
+        Generate a fun Tier \(tier.rawValue) trivia question about \(topicSeed). 
+        Make it exciting! Avoid boring history dates question.
+        Ensure ALL 4 answer choices (1 correct + 3 wrong) are 100% DIFFERENT from one another.
         """
         
         session = LanguageModelSession(instructions: instructions)
@@ -112,7 +114,12 @@ class QuizService: ObservableObject {
         """
         You are a highly balanced trivia game engine for MentorDex. Generate EXACTLY ONE multiple-choice question based on the requested topic and tier.
         
-        CRITICAL DIFFICULTY RULES:
+        CRITICAL RULES FOR OPTIONS (ANTI-DUPLICATE):
+            1. You MUST provide exactly 3 `wrongAnswers`.
+            2. EVERY single option in `wrongAnswers` MUST BE COMPLETELY UNIQUE AND DIFFERENT from each other.
+            3. The `wrongAnswers` MUST NOT contain the `correctAnswer`.
+        
+        DIFFICULTY & TONE:
         • Tier 1 (Easy): Must be answerable by an average 12-year-old. Extremely common knowledge.
           Good Example: "Which planet is known as the Red Planet?"
           Bad Example: "What is the exact chemical composition of Mars?"
@@ -129,7 +136,8 @@ class QuizService: ObservableObject {
         1. Question Length: Under 15 words. Fast to read.
         2. Factual Accuracy: The `correctAnswer` MUST be 100% accurate.
         3. Quality Distractors: Provide exactly 3 `wrongAnswers`. Make them tricky but plausible. DO NOT use joke answers.
-        4. Output ONLY the valid JSON payload.
+        4. Make sure there is NO SAME choice of answers.
+        5. Output ONLY the valid JSON payload.
         """
     }
     
@@ -139,27 +147,27 @@ class QuizService: ObservableObject {
         
         switch tier {
         case .tier1:
-            let a = Int.random(in: 15...85)
-            let b = Int.random(in: 15...85)
-            qText = "What is \(a) + \(b)?"
-            answer = a + b
+            let a = Int.random(in: 1...20)
+            let b = Int.random(in: 1...20)
+            qText = "What is \(a) * \(b)?"
+            answer = a * b
         case .tier2:
-            let a = Int.random(in: 100...400)
-            let b = Int.random(in: 50...150)
-            let c = Int.random(in: 20...90)
+            let a = Int.random(in: 100...999)
+            let b = Int.random(in: 50...999)
+            let c = Int.random(in: 9...99)
             qText = "What is \(a) + \(b) − \(c)?"
             answer = a + b - c
         case .tier3:
-            let a = Int.random(in: 3...55)
-            let b = Int.random(in: 4...55)
-            let c = Int.random(in: 11...99)
-            let d = Int.random(in: 11...99)
-            qText = "What is (\(a) × \(b)) + \(c) - \(d)?"
-            answer = (a * b) + c - d
+            let a = Int.random(in: 101...999)
+            let b = Int.random(in: 10...55)
+            let c = Int.random(in: 10...55)
+            let d = Int.random(in: 100...999)
+            qText = "What is (\(a) - \(b)) + \(c) - \(d)?"
+            answer = (a - b) + c - d
         }
         
-        let wrong1 = answer + Int.random(in: 1...5)
-        let wrong2 = answer - Int.random(in: 1...5)
+        let wrong1 = answer + Int.random(in: 1...9)
+        let wrong2 = answer - Int.random(in: 1...9)
         let wrong3 = answer + 10
         
         var options = [String(wrong1), String(wrong2), String(wrong3), String(answer)]
@@ -250,6 +258,12 @@ struct BrainChallengeView: View {
                 PackOpeningView(tier: tier, rewardCards: earnedCards, dismissAll: dismissAll)
                     .environmentObject(gameState)
             }
+            .onAppear {
+                playMusic("quizmusic", true)
+            }
+            .onDisappear {
+                playMusic("main-bgm", true)
+            }
             .task {
                 if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" { return }
                 await quizService.generateQuestion(tier: tier)
@@ -335,6 +349,7 @@ struct BrainChallengeView: View {
                     .offset(x: shakeOffset)
                     .shadow(color: Color.textPrimary.opacity(0.1), radius: 10, y: 4)
                     .padding(.top, 35)
+                    .padding(.bottom, 20)
                 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                     ForEach(0..<q.options.count, id: \.self) { idx in
@@ -472,6 +487,9 @@ struct BrainChallengeView: View {
     private func handleTimeout() {
         guard !isAnswerRevealed else { return }
         isAnswerRevealed = true
+        
+        wrongAns += 1
+        
         shake()
         scheduleFinish()
     }
@@ -483,8 +501,10 @@ struct BrainChallengeView: View {
         isAnswerRevealed = true
         
         if idx == correct {
+            playSound("correctanswer")
             correctAnswers += 1
         } else {
+            playSound("wronganswer")
             wrongAns += 1
             shake()
         }
@@ -531,57 +551,14 @@ struct BrainChallengeView: View {
                     startTimer()
                 }
             } else {
-                // Selesai! Hitung hasil akhir
                 self.handleFinalResults()
             }
-            
-//            let isTier3InstaFail = (self.tier == .tier3 && self.wrongAns > 0)
-//            let isTier2InstaFail = (self.tier == .tier2 && self.wrongAns > 1)
-//            
-//            let isTier2InstaWin = (self.tier == .tier2 && self.correctAnswers >= 2)
-//            
-//            // Jika ada ronde berikutnya DAN pemain belum terkena Insta-Fail
-//            if (self.tier == .tier2 ? (self.currentRound < self.totalRounds && !isTier2InstaFail || isTier2InstaWin) : (self.currentRound < self.totalRounds && !isTier3InstaFail)) {
-//                // Lanjut ke ronde berikutnya
-//                withAnimation(.spring()) {
-//                    self.currentRound += 1
-//                    self.selectedAnswer = nil
-//                    self.isAnswerRevealed = false
-//                    self.timeRemaining = self.totalTime
-//                }
-//                
-//                Task {
-//                    await quizService.generateQuestion(tier: self.tier)
-//                    startTimer()
-//                }
-//            } else {
-//                // Selesai! Hitung hasil akhir
-//                self.handleFinalResults()
-//            }
-            
-//            if self.currentRound < self.totalRounds && !isTier3InstaFail{
-//                
-//                // Lanjut ke ronde berikutnya
-//                withAnimation(.spring()) {
-//                    self.currentRound += 1
-//                    self.selectedAnswer = nil
-//                    self.isAnswerRevealed = false
-//                    self.timeRemaining = self.totalTime
-//                }
-//                
-//                Task {
-//                    await quizService.generateQuestion(tier: self.tier)
-//                    startTimer()
-//                }
-//                
-//            } else {
-//                // Selesai! Hitung hasil akhir
-//                self.handleFinalResults()
-//            }
         }
     }
     
     private func handleFinalResults() {
+        AudioManager.shared.stopBGM()
+        
         var didWin = false
         
         switch tier {
@@ -590,14 +567,19 @@ struct BrainChallengeView: View {
         case .tier2:
             didWin = correctAnswers >= 2
         case .tier3:
-            didWin = correctAnswers == 3 // Tier 3 tetap butuh 3 benar untuk menang
+            didWin = correctAnswers == 3
         }
         
         if didWin {
+            playSound("victory")
+            playHaptic(style: .heavy, intensity: 1.0)
             withAnimation(.spring()) { showPackChoice = true }
         } else {
+            playSound("fail")
+            playHaptic(style: .heavy, intensity: 1.0)
+            
             if tier == .tier3 && currentRound < totalRounds {
-                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                playHaptic(style: .heavy, intensity: 1.0)
             }
             
             withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
@@ -615,10 +597,10 @@ struct BrainChallengeView: View {
             
             VStack(spacing: 24) {
                 // Ikon Pack Terbang
-                Text(tier.packEmoji)
-                    .font(.system(size: 80))
-                    .shadow(color: tier.packColor.opacity(0.5), radius: 20, y: 10)
-                    .padding(.bottom, 10)
+                Image(tier.packImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 100)
                 
                 VStack(spacing: 8) {
                     Text("Challenge Passed!")
@@ -649,8 +631,8 @@ struct BrainChallengeView: View {
                         gameState.savePackToInventory(tier: tier)
                         if let dismissAll = dismissAll { dismissAll() } else { dismiss() }
                     }) {
-                        Text("Save to Stash")
-                            .font(.custom("Fredoka-Bold", size: 20))
+                        Text("Save to Inventory")
+                            .font(.custom("Fredoka-Bold", size: 18))
                             .foregroundColor(tier.packColor)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 18)

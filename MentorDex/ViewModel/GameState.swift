@@ -1,5 +1,8 @@
 // GameState.swift
 // MentorDex — Central App State (ObservableObject)
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import Foundation
 import SwiftUI
@@ -112,7 +115,7 @@ class GameState: ObservableObject {
     // MARK: - Persistence (UserDefaults)
 
     private let galleryKey = "gallery_v2"
-    private let packsKey = "unopened_packs_v1" // 🌟 Key untuk simpan inventory
+    private let packsKey = "unopened_packs_v1" // Key untuk simpan inventory
 
     func saveState() {
         if let encoded = try? JSONEncoder().encode(gallery) {

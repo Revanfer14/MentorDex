@@ -1,5 +1,9 @@
-// MentorCardFront.swift
-// MentorDex — Shared Mentor Card Front
+//
+//  MentorCardFront.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import SwiftUI
 import CoreMotion
@@ -65,65 +69,31 @@ struct MentorCardFront: View {
 
             // 4. Pokémon-style Detailed Content
             VStack(spacing: 0) {
-                // ── BILAH ATAS (Basic Mentor, Name, HP, Energy) ──
-                HStack(alignment: .bottom) {
+                HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Basic Mentor")
-                            .font(.custom("Fredoka-Bold", size: 12))
+                        Text(mentor.nickname)
+                            .font(.custom("Fredoka-Bold", size: 14))
                             .foregroundColor(gradeMovesTextColor)
                         Text(mentor.name)
-                            .font(.custom("Fredoka-Bold", size: 32))
+                            .font(.custom("Fredoka-Bold", size: 25))
                             .foregroundColor(gradeMovesTextColor)
                     }
-                    .padding(.leading, 20)
-                    
                     Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 2) {
-                        HStack(spacing: 4) {
-                            Text("1000 HP")
-                                .font(.custom("Fredoka-Bold", size: 20))
-                                .foregroundColor(Color(hex: "#EE3B3B")) // Red for HP
-                            
-                            // Ikon energi spesial berdasarkan grade
-                            Image(systemName: "bolt.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(gradeMovesTextColor)
-                        }
-                    }
-                    .padding(.trailing, 20)
                 }
+                
+                .padding(.horizontal, 15)
                 .padding(.top, 16)
 
-                // 🌟 FRAME FOTO YANG MASSIVE (Full Frame Fill)
-                ZStack {
-                    // Background placeholder (Waterfall Gradient) jika foto transparent/simbol
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(gradeWaterfallGradient)
-                    
-                    // FOTO FULL FRAME (Menggunakan Image System Name untuk sekarang,
-                    // tapi jika nanti Anda punya foto asli, ganti Image(mentor.imageName))
-                    Image(systemName: mentor.photoSystemName)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.white.opacity(0.8)) // Memberi warna kontras pada simbol
-                        // 🌟 Trik: Jika Anda menggunakan foto asli (.jpg/.png), gunakan .scaledToFill() di atas
-                        .frame(width: 250, height: 250) // Memperbesar ikon agar mendominasi frame
-                        .padding() // Sedikit padding agar ikon tidak mentok ke sisi
-                    
-                    // Border Frame Foto
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(gradeMovesTextColor, lineWidth: 2)
-                }
-                .frame(height: 250)
-                .clipShape(RoundedRectangle(cornerRadius: 24)) // Potong apa pun yang keluar dari frame
-                .padding(.horizontal, 24)
-                .padding(.top, 16)
+                Image(mentor.mentorImage)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(width: 250, height: 250)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .padding(.horizontal, 24)
+                    .padding(.top, 16)
 
-                // 🌟 BILAH STATISTIK DETAIL (Gantikan Moves Block)
                 VStack(spacing: 12) {
-                    
-                    // Pill untuk Role
                     Text(mentor.role.uppercased())
                         .font(.custom("Fredoka-Bold", size: 12))
                         .kerning(1.5)
@@ -133,15 +103,17 @@ struct MentorCardFront: View {
                         .background(Capsule().fill(Color(hex: "#A7E2FF").opacity(0.5)))
                         .padding(.bottom, 4)
                     
+                    // Gunakan 'text:' untuk string tunggal
                     InfoRow(label: "Career", text: mentor.career, icon: "briefcase.fill", color: gradeMovesTextColor)
-                    InfoRow(label: "Education", text: mentor.education, icon: "graduationcap.fill", color: gradeMovesTextColor)
-
+                    // Gunakan 'texts:' untuk array
+                    InfoRow(label: "Education", texts: mentor.education, icon: "graduationcap.fill", color: gradeMovesTextColor)
+                    
                     if grade == .common {
-                        LockedInfoRow(label: "Hobby", text: mentor.hobby, icon: "heart.fill", color: Color(hex: "#FFB800"))
-                        LockedInfoRow(label: "Fun Fact", text: mentor.funFact, icon: "sparkles", color: Color(hex: "#9C27B0"))
+                        LockedInfoRow(label: "Hobby", texts: mentor.hobby, icon: "heart.fill", color: Color(hex: "#FFB800"))
+                        LockedInfoRow(label: "Fun Fact", texts: mentor.funFact, icon: "sparkles", color: Color(hex: "#9C27B0"))
                     } else {
-                        InfoRow(label: "Hobby", text: mentor.hobby, icon: "heart.fill", color: Color(hex: "#FFB800"))
-                        InfoRow(label: "Fun Fact", text: mentor.funFact, icon: "sparkles", color: Color(hex: "#9C27B0"))
+                        InfoRow(label: "Hobby", texts: mentor.hobby, icon: "heart.fill", color: Color(hex: "#FFB800"))
+                        InfoRow(label: "Fun Fact", texts: mentor.funFact, icon: "sparkles", color: Color(hex: "#9C27B0"))
                     }
                 }
                 .padding(.top, 16)
@@ -149,7 +121,6 @@ struct MentorCardFront: View {
 
                 Spacer()
 
-                // ── BILAH FOOTER (Teks Deskripsi & Retreat Cost) ──
                 HStack {
                     Spacer()
                     Text("Apple Developer Academy @ 2026")
@@ -163,18 +134,15 @@ struct MentorCardFront: View {
                 .padding(.bottom, 8)
             }
         }
-        // 🌟 UKURAN KARTU MASSIVE
-        .frame(width: 400, height: 550)
+        
+        .frame(width: 400, height: 650)
         .rotation3DEffect(
-            isRare ? .degrees(motionManager.tiltX * (isLegendary ? 12 : 8)) : .zero,
-            axis: (x: 0, y: 1, z: 0)
-        )
-        .rotation3DEffect(
-            isRare ? .degrees(-motionManager.tiltY * (isLegendary ? 12 : 8)) : .zero,
-            axis: (x: 1, y: 0, z: 0)
+            isRare ? .degrees(motionManager.tiltX * (isLegendary ? 15 : 10)) : .zero,
+            axis: (x: 0, y: 1, z: 0),
+            perspective: 0.55
         )
         .shadow(
-            color: isLegendary ? Color(hex: "#FFD700").opacity(0.6) : (isEpic ? Color(hex: "#FFD700").opacity(0.4) : Color.black.opacity(0.1)),
+            color: isLegendary ? Color(hex: "#FFD700").opacity(0.6) : (isEpic ? Color.epiccard.opacity(0.4) : Color.black.opacity(0.1)),
             radius: isLegendary ? 30 : (isEpic ? 24 : 10),
             y: 6
         )
@@ -186,7 +154,7 @@ struct MentorCardFront: View {
         }
     }
 
-    // Latar belakang pelat kartu berdasarkan grade
+    // Latar belakang kartu berdasarkan grade
     private var cardBgPlate: LinearGradient {
         if isLegendary {
             return LinearGradient(colors: [Color(hex: "#FFF8E1"), Color(hex: "#FFF1B8")], startPoint: .top, endPoint: .bottom)
@@ -202,7 +170,7 @@ struct MentorCardFront: View {
         if isLegendary {
             return LinearGradient(colors: [Color(hex: "#FFF9D2"), Color(hex: "#FFD700")], startPoint: .topLeading, endPoint: .bottomTrailing)
         } else if isEpic {
-            return LinearGradient(colors: [Color(hex: "#F9EBFF"), Color(hex: "#D4B8FF")], startPoint: .topLeading, endPoint: .bottomTrailing)
+            return LinearGradient(colors: [Color(hex: "#F3E5F5"), Color(hex: "#CE93D8")], startPoint: .topLeading, endPoint: .bottomTrailing)
         } else {
             return LinearGradient(colors: [Color(hex: "#D6F0FF"), Color(hex: "#82BBDD")], startPoint: .topLeading, endPoint: .bottomTrailing)
         }
@@ -212,7 +180,7 @@ struct MentorCardFront: View {
         if isLegendary {
             return LinearGradient(colors: [Color(hex: "#FF6B6B"), Color(hex: "#FCA048"), Color(hex: "#FFD700")], startPoint: .topLeading, endPoint: .bottomTrailing)
         } else if isEpic {
-            return LinearGradient(colors: [Color(hex: "#FFD700"), Color(hex: "#FFA500"), Color(hex: "#FFD700")], startPoint: .topLeading, endPoint: .bottomTrailing)
+            return LinearGradient(colors: [Color(hex: "#FDF4FF"), Color(hex: "#FCF0FF"), Color(hex: "F3E5F5")], startPoint: .top, endPoint: .bottom)
         } else {
             return LinearGradient(colors: [Color(hex: "#A7E2FF"), Color(hex: "#7CCFFF")], startPoint: .topLeading, endPoint: .bottomTrailing)
         }
@@ -220,12 +188,27 @@ struct MentorCardFront: View {
 }
 
 // MARK: - Reusable Info Row
-
 struct InfoRow: View {
     let label: String
-    let text: String
+    let texts: [String] // Data utama disimpan dalam bentuk array
     let icon: String
-    var color: Color = Color(hex: "#888888")
+    var color: Color
+
+    // Opsi 1: Jika yang dimasukkan adalah String tunggal (Career, Hobby, Fun Fact)
+    init(label: String, text: String, icon: String, color: Color = Color(hex: "#888888")) {
+        self.label = label
+        self.texts = [text] // Ubah otomatis jadi array berisi 1
+        self.icon = icon
+        self.color = color
+    }
+
+    // Opsi 2: Jika yang dimasukkan adalah Array (Education)
+    init(label: String, texts: [String], icon: String, color: Color = Color(hex: "#888888")) {
+        self.label = label
+        self.texts = texts
+        self.icon = icon
+        self.color = color
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -234,15 +217,18 @@ struct InfoRow: View {
                 .foregroundColor(color)
                 .frame(width: 18)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(label)
                     .font(.custom("Fredoka-Bold", size: 12))
                     .foregroundColor(Color(hex: "#888888"))
-                Text(text)
-                    .font(.custom("Fredoka-SemiBold", size: 16))
-                    .foregroundColor(Color(hex: "#555555"))
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+                
+                // Looping data dengan benar
+                ForEach(texts, id: \.self) { item in
+                    Text(texts.count > 1 ? "• \(item)" : item)
+                        .font(.custom("Fredoka-SemiBold", size: 14))
+                        .foregroundColor(Color(hex: "#555555"))
+                        .fixedSize(horizontal: false, vertical: true) // Mencegah teks terpotong (...)
+                }
             }
             Spacer()
         }
@@ -253,9 +239,25 @@ struct InfoRow: View {
 
 struct LockedInfoRow: View {
     let label: String
-    let text: String
+    let texts: [String]
     let icon: String
-    var color: Color = Color(hex: "#888888")
+    var color: Color
+
+    // Opsi 1: Single String
+    init(label: String, text: String, icon: String, color: Color = Color(hex: "#888888")) {
+        self.label = label
+        self.texts = [text]
+        self.icon = icon
+        self.color = color
+    }
+
+    // Opsi 2: Array String
+    init(label: String, texts: [String], icon: String, color: Color = Color(hex: "#888888")) {
+        self.label = label
+        self.texts = texts
+        self.icon = icon
+        self.color = color
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -264,16 +266,18 @@ struct LockedInfoRow: View {
                 .foregroundColor(color)
                 .frame(width: 18)
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(label)
                     .font(.custom("Fredoka-Bold", size: 12))
                     .foregroundColor(Color(hex: "#888888"))
-                Text(text)
-                    .font(.custom("Fredoka-SemiBold", size: 16))
-                    .foregroundColor(Color(hex: "#555555"))
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .blur(radius: 5)
+                
+                ForEach(texts, id: \.self) { item in
+                    Text(texts.count > 1 ? "• \(item)" : item)
+                        .font(.custom("Fredoka-SemiBold", size: 14))
+                        .foregroundColor(Color(hex: "#555555"))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .blur(radius: 5)
+                }
             }
             
             Spacer()

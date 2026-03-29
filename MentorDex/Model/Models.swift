@@ -1,5 +1,9 @@
-// Models.swift
-// MentorDex — Core Data Models
+//
+//  Models.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import Foundation
 import SwiftUI
@@ -8,13 +12,14 @@ import SwiftUI
 
 struct Mentor: Identifiable, Codable, Equatable {
     let id: Int
+    let nickname: String
     let name: String
     let role: String
     let career: String
-    let education: String
-    let hobby: String
-    let funFact: String
-    let photoSystemName: String 
+    let education: [String]
+    let hobby: [String]
+    let funFact: [String]
+    let mentorImage: String
     let accentColor: String
 }
 
@@ -39,9 +44,9 @@ struct GalleryEntry: Identifiable, Codable {
 
 enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
     case tier1 = 1, tier2 = 2, tier3 = 3
-
+    
     var id: Int { rawValue }
-
+    
     var cardRewardCount: Int {
         switch self {
         case .tier1: return 1
@@ -49,17 +54,17 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
         case .tier3: return 3
         }
     }
-
+    
     var dropRates: (commonRate: Double, epicRate: Double, legendaryRate: Double) {
         switch self {
-        case .tier1: return (0.94, 0.05, 0.01)
-        case .tier2: return (0.85, 0.12, 0.03)
+        case .tier1: return (0.89, 0.10, 0.01)
+        case .tier2: return (0.82, 0.15, 0.03)
         case .tier3: return (0.85, 0.10, 0.05)
         }
     }
-
+    
     var guaranteedEpic: Bool { self == .tier3 }
-
+    
     var description: String {
         switch self {
         case .tier1: return "1 Easy"
@@ -70,28 +75,28 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
     
     var criteria: String {
         switch self {
-            case .tier1: return "Answer 1 question"
-            case .tier2: return "Answer at least 2 question"
-            case .tier3: return "Answer 3 question in a row"
+        case .tier1: return "Answer 1 question"
+        case .tier2: return "Answer at least 2 question"
+        case .tier3: return "Answer 3 question in a row"
         }
     }
     
     var chances: String {
         switch self {
-        case .tier1: return "94% Common, 5% Epic, 1% Legendary"
-        case .tier2: return "85% Common, 12% Epic, 3% Legendary"
+        case .tier1: return "89% Common, 10% Epic, 1% Legendary"
+        case .tier2: return "82% Common, 15% Epic, 3% Legendary"
         case .tier3: return "1 Guaranteed Epic \n 85% Common, 10% Epic, 5% Legendary"
         }
     }
-
+    
     var packColor: Color {
         switch self {
-        case .tier1: return Color(hex: "#A7E2FF")
-        case .tier2: return Color(hex: "#800000")
-        case .tier3: return Color(hex: "#FFD700")
+        case .tier1: return Color.starterpack
+        case .tier2: return Color.propack
+        case .tier3: return Color.legendpack
         }
     }
-
+    
     var packLabel: String {
         switch self {
         case .tier1: return "Starter Pack"
@@ -99,12 +104,12 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
         case .tier3: return "Legendary Pack"
         }
     }
-
-    var packEmoji: String {
+    
+    var packImage: String {
         switch self {
-        case .tier1: return "📦"
-        case .tier2: return "🎁"
-        case .tier3: return "⚡️"
+        case .tier1: return "pack_preview_1"
+        case .tier2: return "pack_preview_2"
+        case .tier3: return "pack_preview_3"
         }
     }
 }
@@ -113,13 +118,13 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
 
 enum ChallengePath: String, CaseIterable {
     case brain = "BRAIN"
-
+    
     var emoji: String {
         switch self {
         case .brain: return "🧠"
         }
     }
-
+    
     var description: String {
         switch self {
         case .brain: return "Answer trivia questions"
@@ -177,23 +182,42 @@ extension Color {
 
 extension Mentor {
     static let sampleData: [Mentor] = [
-        Mentor(id: 1, name: "Alex Rivera", role: "iOS Engineer", career: "Senior Engineer at Apple", education: "BS Computer Science, MIT", hobby: "Bouldering", funFact: "Once shipped a feature used by 200M users overnight.", photoSystemName: "person.fill", accentColor: "#A7E2FF"),
-        Mentor(id: 2, name: "Priya Sharma", role: "ML Researcher", career: "Research Scientist at DeepMind", education: "PhD Machine Learning, Stanford", hobby: "Classical Piano", funFact: "Published her first paper at age 19.", photoSystemName: "person.fill", accentColor: "#FFF39D"),
-        Mentor(id: 3, name: "Jordan Kim", role: "Product Designer", career: "Principal Designer at Figma", education: "BFA Interaction Design, RISD", hobby: "Ceramics", funFact: "Designed the icon used by 15M daily users.", photoSystemName: "person.fill", accentColor: "#D4B8FF"),
-        Mentor(id: 4, name: "Marcus Chen", role: "Backend Engineer", career: "Staff Engineer at Stripe", education: "BS Software Engineering, CMU", hobby: "Competitive Chess", funFact: "Handles 1M transactions per second in production.", photoSystemName: "person.fill", accentColor: "#B8FFD4"),
-        Mentor(id: 5, name: "Sofia Torres", role: "Data Scientist", career: "Lead Data Scientist at Spotify", education: "MS Statistics, Columbia", hobby: "Salsa Dancing", funFact: "Her algorithms recommend music to 600M listeners.", photoSystemName: "person.fill", accentColor: "#FFB8C6"),
-        Mentor(id: 6, name: "Liam O'Brien", role: "Security Engineer", career: "Principal Engineer at Cloudflare", education: "BS Cybersecurity, Purdue", hobby: "Rock Climbing", funFact: "Blocked the largest DDoS attack in history.", photoSystemName: "person.fill", accentColor: "#FFD4B8"),
-        Mentor(id: 7, name: "Yuki Tanaka", role: "DevOps Lead", career: "SRE Lead at Google", education: "MS Computer Engineering, Keio", hobby: "Origami", funFact: "Reduced company infra cost by $4M in one year.", photoSystemName: "person.fill", accentColor: "#A7E2FF"),
-        Mentor(id: 8, name: "Amara Osei", role: "Frontend Engineer", career: "Senior Engineer at Vercel", education: "BS Computer Science, Ghana Tech", hobby: "Street Photography", funFact: "Open source projects with 50k+ GitHub stars.", photoSystemName: "person.fill", accentColor: "#FFF39D"),
-        Mentor(id: 9, name: "Diego Reyes", role: "Mobile Architect", career: "Staff Engineer at Uber", education: "MS Software Engineering, Georgia Tech", hobby: "Surfing", funFact: "Built the real-time GPS system in the Uber driver app.", photoSystemName: "person.fill", accentColor: "#D4B8FF"),
-        Mentor(id: 10, name: "Emma Larsson", role: "AI Ethics Lead", career: "Director at Anthropic", education: "PhD Philosophy, Oxford", hobby: "Long-distance Running", funFact: "Advises 3 governments on AI regulation.", photoSystemName: "person.fill", accentColor: "#B8FFD4"),
-        Mentor(id: 11, name: "Raj Patel", role: "Blockchain Developer", career: "Core Dev at Ethereum Foundation", education: "BS Mathematics, IIT Bombay", hobby: "Astronomy", funFact: "Wrote the ERC-721 NFT standard implementation.", photoSystemName: "person.fill", accentColor: "#FFB8C6"),
-        Mentor(id: 12, name: "Chloe Dubois", role: "UX Researcher", career: "Principal Researcher at Meta", education: "MA Cognitive Science, Sorbonne", hobby: "Improv Theatre", funFact: "Her research reshaped Facebook's news feed algorithm.", photoSystemName: "person.fill", accentColor: "#FFD4B8"),
-        Mentor(id: 13, name: "Kwame Mensah", role: "Systems Engineer", career: "Kernel Engineer at Linux Foundation", education: "BS Computer Engineering, UCT", hobby: "Jazz Drumming", funFact: "His kernel patch is in every Android phone.", photoSystemName: "person.fill", accentColor: "#A7E2FF"),
-        Mentor(id: 14, name: "Hana Yoshida", role: "AR/VR Developer", career: "Vision Engineer at Apple", education: "MS Human-Computer Interaction, CMU", hobby: "Ikebana", funFact: "Shipped a key visionOS spatial computing feature.", photoSystemName: "person.fill", accentColor: "#FFF39D"),
-        Mentor(id: 15, name: "Tyler Brooks", role: "Growth Engineer", career: "VP Engineering at Airbnb", education: "BS Economics, Yale", hobby: "Kitesurfing", funFact: "A/B tested his way to a $200M revenue uplift.", photoSystemName: "person.fill", accentColor: "#D4B8FF"),
-        Mentor(id: 16, name: "Nadia Kowalski", role: "Compiler Engineer", career: "LLVM Contributor at NVIDIA", education: "PhD Computer Science, Warsaw", hobby: "Speed Cubing", funFact: "Her CUDA optimization made GPT-4 training 18% faster.", photoSystemName: "person.fill", accentColor: "#B8FFD4"),
-        Mentor(id: 17, name: "Sam Washington", role: "Cloud Architect", career: "Fellow at AWS", education: "MS Distributed Systems, Berkeley", hobby: "Beekeeping", funFact: "Designed AWS's multi-region failover architecture.", photoSystemName: "person.fill", accentColor: "#FFB8C6"),
-        Mentor(id: 18, name: "Fatima Al-Rashid", role: "Robotics Engineer", career: "Lead Engineer at Boston Dynamics", education: "PhD Robotics, ETH Zurich", hobby: "Parkour", funFact: "Programmed Atlas's backflip sequence.", photoSystemName: "person.fill", accentColor: "#FFD4B8"),
+        Mentor(id: 1, nickname: "Ko Har", name: "Haryanto Salim", role: "Tech Mentor", career: "Tech Mentor for 8 years 2 months", education: ["S1 Binus University", "S2 Swiss German University (on going)"], hobby: ["Martial Art", "Drawing"], funFact: ["Won some gold medals in university level and silver medals after 30s (Martial Arts)"], mentorImage: "kohar", accentColor: "#A7E2FF"),
+        
+        Mentor(id: 2, nickname: "Ko Jacob", name: "Jacob Andrean", role: "Tech Mentor", career: "Ex iOS Developer at Gojek, Accenture, LPS, Bank Saham, Group Avows", education: ["S1 Universitas Tarumanagara"], hobby: ["Coding"], funFact: ["Punya doggy suka ngempeng", "Loves new technology / invention"], mentorImage: "kojacob", accentColor: "#FFF39D"),
+        
+        Mentor(id: 3, nickname: "Ci Jes", name: "Jessi Febria", role: "Tech Mentor", career: "Ex Software Engineer (iOS) at Traveloka", education: ["S1 Universitas Kristen Satya Wacana"], hobby: ["Binge Watching"], funFact: ["Once a star seller at Shopee with 200k+ products sold", "Alumni of ADA Cohort 4", "Co-Founder of PetaNetra"], mentorImage: "cijes", accentColor: "#D4B8FF"),
+        
+        Mentor(id: 4, nickname: "Ka Rima", name: "Karima Yulia", role: "Design Mentor", career: "Ex Senior Visual Designer at Traveloka", education: ["S1 Institut Teknologi Bandung", "S2 Monash University"], hobby: ["Reading books", "Playing cozy game"], funFact: ["Hafal lagu pop tahun 90an", "Balkon apart paling hijau se-antero Casa de Parco"], mentorImage: "karima", accentColor: "#B8FFD4"),
+        
+        Mentor(id: 5, nickname: "Ka Khoi", name: "Khoirunnisa Rizky Noor Fatimah", role: "Tech Mentor", career: "Tech Mentor for 6 years", education: ["S1 Universitas Gadjah Mada", "S2 Monash University"], hobby: ["Tennis", "Archery"], funFact: ["Used to be Javanese/Kpop dancer", "Alumni of ADA Cohort 2", "Co-Founder of Qiroah"], mentorImage: "kakhoi", accentColor: "#FFB8C6"),
+        
+        Mentor(id: 6, nickname: "Ci Meicy", name: "Emery Meicy", role: "Design Mentor", career: "Ex Freelancer and Remote Worker", education: ["S1 Binus University", "Study abroad to Northumbira University for a year"], hobby: ["Cooking", "Crafting"], funFact: ["Like any kind of cuisine with tofu", "Easily distracted by sound"], mentorImage: "cimeicy", accentColor: "#FFD4B8"),
+        
+        Mentor(id: 7, nickname: "Ko Phil", name: "Phil Wira", role: "Co Head of Academy", career: "Ex Design Mentor in Apple Developer Academy", education: ["S1 Illinois Institute of Technology | (Architecture)"], hobby: ["Playing boardgame", "Volleyball"], funFact: ["Alergi cabe", "Suka keju padahal lactose intolerant", "Alumni of ADA Cohort 1"], mentorImage: "kophil", accentColor: "#A7E2FF"),
+        
+        Mentor(id: 8, nickname: "Ka Rizqi", name: "Rizqi Imam Gilang Widianto", role: "Tech Mentor", career: "Ex Project Manager & iOS Developer at Bank Mandiri", education: ["S1 Universitas Indonesia"], hobby: ["Main bola, futsal, mini soccer, fifa", "Baca buku"], funFact: ["Main Fifa dari 2006", "Suka banget secbowl", "Alumni of ADA Cohort 3"], mentorImage: "karizqi", accentColor: "#FFF39D"),
+        
+        Mentor(id: 9, nickname: "Ci Valen", name: "Valencia Gabriella", role: "Product & Growth Mentor", career: "Ex Product Manager at Traveloka & Brand Manager at Unilever", education: ["S1 The Hong Kong University of Science and Technology", "S2 University of Melbourne"], hobby: ["Creating contents", "Reading books", "Watching k-drama"], funFact: ["Pernah makan serangga", "Adrenaline junkie", "Founder of talentgo.ai"], mentorImage: "civalen", accentColor: "#D4B8FF"),
+        
+        Mentor(id: 10, nickname: "Ko Wilchris", name: "William Chrisandy", role: "Tech Mentor", career: "Ex Software Engineer at Samsung R&D Indonesia", education: ["S1 Binus University"], hobby: ["Listening to music", "Sleeping"], funFact: ["Top 0.001% listeners of Taylor Swift", "Suka kesandung / nabrak sendiri", "Alumni of ADA Cohort 5"], mentorImage: "kowilc", accentColor: "#B8FFD4"),
+        
+        Mentor(id: 11, nickname: "Ko Luq", name: "Luqman Adi Prasatya Hamaki", role: "Design Mentor", career: "Ex Copywriter at Blibli & Traveloka, Ex UX Writer at Bank Mandiri & GoTo Group", education: ["S1 Hunter College New York", "S2 Prasetiya Mulia"], hobby: ["Cycling", "Ngerakit plastic models (gundam, tamiya)"], funFact: ["Pernah bike tour keliling New York City", "Tinggal 13 tahun di New York dari SMA sampe kerja"], mentorImage: "koluq", accentColor: "#FFF39D"),
+        
+        Mentor(id: 12, nickname: "Ka Ica", name: "Anisa Nabila", role: "Co Head of Academy", career: "Ex Interaction Designer at Traveloka", education: ["S1 Institut Teknologi Bandung", "S2 University of Melbourne"], hobby: ["Trekking", "Travelling"], funFact: ["Panggilannya 'unyil' di rumah karena anak bungsu", "Pernah tenggelam di Pangandaran waktu kecil"], mentorImage: "kaica", accentColor: "#FFD4B8"),
+        
+        Mentor(id: 13, nickname: "Ko Hen", name: "Henri Jufry", role: "Product & Growth Mentor", career: "Ex Assistant to Resident Director at University of California", education: ["S1 - (Unknown)", "S2 University of South Australia"], hobby: ["Otomotif", "Olahraga"], funFact: ["Color Blind Partial", "Suka pake topi"], mentorImage: "kohen", accentColor: "#A7E2FF"),
+        
+        Mentor(id: 14, nickname: "Ko Wil", name: "William Sjahrial", role: "Product & Growth Mentor", career: "Ex Lecturer at Universitas Multimedia Nusantara, Ex Software Engineer at Mizuho (Japan), Ex iOS Developer at Mirai LLP (Japan)", education: ["S1 Georgia Institute of Technology"], hobby: ["Lego", "Gym", "Sports"], funFact: ["Suka main Street Fighter dulu", "Suka olahraga dan gym"], mentorImage: "kowil", accentColor: "#FFB8C6"),
+        
+        Mentor(id: 15, nickname: "Ka Ria", name: "Ria Chandra", role: "Design Mentor", career: "Ex Full Time Laboratory Assistant at Binus, Ex User Experience Designer & Researcher at Harian Kompas", education: ["S1 Binus University"], hobby: ["Suka main dan nonton", "Crafting"], funFact: ["Bisa bahasa arab dan lumayan banyak bahasa", "Pas kuliah, cuma ada 6 perempuan seangkatan"], mentorImage: "karia", accentColor: "#D4B8FF"),
+        
+        Mentor(id: 16, nickname: "Ka Afi", name: "Tsamara Alifia", role: "Design Mentor", career: "Ex Freelancer", education: ["S1 & S2 Institut Teknologi Bandung"], hobby: ["Main game", "Gym", "Baca komik"], funFact: ["A big potterhead, pernah nulis fanmail ke Daniel Radcliffe & Emma Watson dan dibales!", "Alumni of ADA Cohort 4", "WWDC 2021 Winner"], mentorImage: "kaafi", accentColor: "#B8FFD4"),
+        
+        Mentor(id: 17, nickname: "Ka Toya" , name: "Jazilul Athoya", role: "Tech Mentor", career: "Tech Mentor for 8 years 2 months", education: ["S1 Universitas Gadjah Mada", "S2 Seoul National University of Science and Technology"], hobby: ["TCG Pokemon", "Aquascape"], funFact: ["Chicken Farmer", "Coder tapi bisa ilustrasi"], mentorImage: "katoya", accentColor: "#FFB8C6"),
+        
+        Mentor(id: 18, nickname: "Ko Octa",name: "Octavianus Gandajaya", role: "Tech Mentor", career: "Tech Mentor for 9 years", education: ["S1 Binus University"], hobby: ["Console Gaming", "Discovering new tech"], funFact: ["Climbed Rinjani Mountain on 1st climbing", "Dived 15m deep on 1st diving"], mentorImage: "koocta", accentColor: "#FFD4B8"),
+        
+        Mentor(id: 19, nickname: "Ci Del" , name: "Delvina Janice", role: "Tech Mentor", career: "Ex iOS Engineer at Ajaib", education: ["(Unknown)"], hobby: ["Crochet", "Gaming"], funFact: ["Ex Ballerina", "Alumni of ADA Cohort 4"], mentorImage: "cidel", accentColor: "#FFB8C6")
     ]
 }

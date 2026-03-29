@@ -1,5 +1,9 @@
-// PackOpeningView.swift
-// MentorDex — Pack Unboxing + Spinning Card Reveal
+//
+//  PackOpeningView.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import SwiftUI
 import SceneKit
@@ -11,7 +15,7 @@ import Combine
 struct PackOpeningView: View {
     let tier: ChallengeTier
     let rewardCards: [GameState.RewardCard]
-    /// Collapses the entire presentation stack (pack → arena → path sheet)
+
     var dismissAll: (() -> Void)? = nil
     
     @EnvironmentObject var gameState: GameState
@@ -61,7 +65,13 @@ struct PackOpeningView: View {
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
-        .onAppear { startIdleAnimations() }
+        .onAppear {
+            AudioManager.shared.playBGM(filename: "musicbukapack", forcePlay: true)
+            startIdleAnimations()
+        }
+        .onDisappear {
+            AudioManager.shared.playBGM(filename: "main-bgm")
+        }
     }
     
     // MARK: — Premium Sky Background
@@ -100,7 +110,7 @@ struct PackOpeningView: View {
             // Pack layers (Now using 3D Model)
             ZStack {
                 // ── BOTTOM HALF (3D) ──
-                Pack3DView(modelName: "pack_3d_\(tier.rawValue)") // Ganti dengan nama file .usdz Anda
+                Pack3DView(modelName: "pack_3d_\(tier.rawValue)")
                     .frame(width: packW, height: packH)
                     .clipped()
                     .clipShape(
@@ -111,7 +121,7 @@ struct PackOpeningView: View {
                     .offset(y: botHalfOffset)
                 
                 // ── TOP HALF (3D) ──
-                Pack3DView(modelName: "pack_3d_\(tier.rawValue)") // Ganti dengan nama file .usdz Anda
+                Pack3DView(modelName: "pack_3d_\(tier.rawValue)")
                     .frame(width: packW, height: packH)
                     .clipped()
                     .clipShape(
@@ -143,6 +153,7 @@ struct PackOpeningView: View {
                     .gesture(
                         DragGesture(minimumDistance: 6)
                             .onChanged { v in
+                                playSound("bukapack")
                                 let raw = max(0, min(1, -v.translation.height / 200))
                                 tearProgress = raw
                                 topHalfOffset = -raw * 120
@@ -250,7 +261,7 @@ struct PackOpeningView: View {
                     .shadow(color: Color(hex: "#FFD700").opacity(0.5), radius: 20)
                 
                 Text("Pack Opened!")
-                    .font(.custom("Fredoka-Bold", size: 38))
+                    .font(.custom("Fredoka-Bold", size: 35))
                     .foregroundColor(Color.textPrimary)
                 
                 Text("Cards added to your gallery")
@@ -269,7 +280,7 @@ struct PackOpeningView: View {
                             
                             // Grade Tag
                             Text(card.grade.rawValue.uppercased())
-                                .font(.custom("Fredoka-Bold", size: 13))
+                                .font(.custom("Fredoka-Regular", size: 12))
                                 .kerning(1.5)
                                 .foregroundColor(card.grade == .common ? Color.textPrimary : .white)
                                 .padding(.horizontal, 14).padding(.vertical, 6)
@@ -277,7 +288,7 @@ struct PackOpeningView: View {
                                     Capsule().fill(
                                         card.grade == .legendary
                                         ? LinearGradient(colors: [Color(hex: "#FF6B6B"), Color(hex: "#FCA048"), Color(hex: "#FFD700")], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                        : (card.grade == .epic ? LinearGradient(colors: [Color(hex: "#FFB800"), Color(hex: "#FFD700")], startPoint: .top, endPoint: .bottom) : LinearGradient(colors: [Color(hex: "#E8F4FA"), Color(hex: "#E8F4FA")], startPoint: .top, endPoint: .bottom))
+                                        : (card.grade == .epic ? LinearGradient(colors: [Color.epiccard], startPoint: .top, endPoint: .bottom) : LinearGradient(colors: [Color(hex: "#E8F4FA"), Color(hex: "#E8F4FA")], startPoint: .top, endPoint: .bottom))
                                     )
                                 )
                                 .shadow(color: card.grade == .legendary ? Color(hex: "#FFD700").opacity(0.4) : .clear, radius: 4)
@@ -308,6 +319,9 @@ struct PackOpeningView: View {
             .padding(.top, 60).padding(.bottom, 40)
         }
         .padding(.top, 100)
+        .onAppear {
+            playSound("dapetkartu")
+        }
     }
     
     // MARK: — Logic
@@ -323,8 +337,10 @@ struct PackOpeningView: View {
     }
     
     private func finishTear() {
-        // Haptic rip!
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        playHaptic(style: .heavy, intensity: 1.0)
+        playSound("bukapack")
+        
+        AudioManager.shared.stopBGM()
         
         withAnimation(.spring(response: 0.35, dampingFraction: 0.6)) {
             topHalfOffset = -80
@@ -407,7 +423,7 @@ struct EnergyParticles: View {
 struct SpinningRevealCard: View {
     let card: GameState.RewardCard
     let tier: ChallengeTier
-    
+
     @State private var spinDegrees: Double = 0
     @State private var showFront: Bool = false
     @State private var cardScale: CGFloat = 0.35 // Skala awal saat melompat dari bungkus
@@ -448,8 +464,7 @@ struct SpinningRevealCard: View {
                         // FRONT FACING CARD WITH HOLOGRAM
                         ZStack {
                             MentorCardFront(mentor: card.mentor, grade: card.grade)
-                            
-                            // 🌟 LEGENDARY GYRO HOLOGRAM OVERLAY
+
                             if card.grade == .legendary {
                                 LegendaryHoloOverlay(pitch: motion.pitch, roll: motion.roll)
                             }
@@ -458,7 +473,7 @@ struct SpinningRevealCard: View {
                         CardBackFace()
                     }
                 }
-                // 🌟 PERBAIKAN SCALING:
+               
                 // Susutkan kartu menjadi 75% dari ukuran raksasa aslinya (400x550) agar pas di layar iPhone
                 .scaleEffect(0.75)
                 // Beritahu SwiftUI ruang (bounding box) yang digunakan SETELAH disusutkan
@@ -507,7 +522,7 @@ struct SpinningRevealCard: View {
     
     private func startSpin() {
         let isLegend = card.grade == .legendary
-        let spinSpeed = isLegend ? 0.65 : 0.32 // Legendary spins slower for dramatic effect
+        let spinSpeed = isLegend ? 0.65 : 0.32
         let bounce = isLegend ? 0.75 : 0.58
         
         withAnimation(.spring(response: 0.45, dampingFraction: 0.65)) {
@@ -522,10 +537,20 @@ struct SpinningRevealCard: View {
         // Flip to front
         DispatchQueue.main.asyncAfter(deadline: .now() + spinSpeed) {
             showFront = true
-            
+
             // Boom Haptic!
             if isLegend {
-                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                // Getaran keras dan mantap untuk Legendary
+                playSound("dapetlegend")
+                playHaptic(style: .heavy, intensity: 1.0)
+            } else if card.grade == .epic {
+                // Getaran sedang untuk Epic
+                playSound("dapetepic")
+                playHaptic(style: .heavy, intensity: 1.0)
+            } else {
+                // Getaran ringan untuk Common
+                playSound("dapetcommon")
+                playHaptic(style: .heavy, intensity: 0.8)
             }
         }
         

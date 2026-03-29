@@ -1,5 +1,9 @@
-// DashboardView.swift
-// MentorDex — Home / Dashboard
+//
+//  DashboardView.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 25/03/26.
+//
 
 import SwiftUI
 
@@ -11,6 +15,9 @@ struct DashboardView: View {
     @State private var showStashOpening = false
     @State private var stashTierToOpen: ChallengeTier? = nil
     @State private var stashRewardCards: [GameState.RewardCard] = []
+
+    @State private var showDisclaimer: Bool = false
+    static var hasSeenDisclaimer: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -30,16 +37,16 @@ struct DashboardView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-
+                        
                         headerSection
                         
                         unopenedPacksSection
                         
-
+                        
                         VStack(alignment: .leading, spacing: 20) {
                             Text("Choose Your Pack")
                                 .font(.custom("Fredoka-Bold", size: 24))
-                                .foregroundColor(Color.textPrimary) // Deep Navy
+                                .foregroundColor(Color.textPrimary)
                                 .padding(.horizontal, 24)
                             
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -61,6 +68,72 @@ struct DashboardView: View {
                     }
                     .padding(.top, 12)
                 }
+                
+                if showDisclaimer {
+                    ZStack {
+                        // Latar belakang gelap transparan
+                        Color.black.opacity(0.6)
+                            .background(.ultraThinMaterial)
+                            .ignoresSafeArea()
+                        
+                        // Kotak Pop-up
+                        VStack(spacing: 24) {
+                            // Header
+                            VStack(spacing: 8) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(Color.propack)
+                                    .shadow(color: Color(hex: "#F59E0B").opacity(0.4), radius: 10, y: 5)
+                                
+                                Text("DISCLAIMER")
+                                    .font(.custom("Fredoka-Bold", size: 24))
+                                    .foregroundColor(Color.textPrimary)
+                            }
+                            
+                            // Isi Disclaimer
+                            VStack(alignment: .leading, spacing: 16) {
+                                DisclaimerRow(
+                                    number: "1",
+                                    text: "All mentors at the Apple Developer Academy have 3 card variations: Common, Epic, and Legendary."
+                                )
+                                
+                                DisclaimerRow(
+                                    number: "2",
+                                    text: "The Common, Epic, and Legendary tiers purely represent in-game card rarity and are NOT intended to evaluate or rank the mentors' real-life performance."
+                                )
+                            }
+                            .padding(.vertical, 8)
+                            
+                            // Tombol Mengerti
+                            Button(action: {
+                                playHaptic(style: .medium)
+                                playSound("click")
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                    showDisclaimer = false
+                                }
+                            }) {
+                                Text("I Understand")
+                                    .font(.custom("Fredoka-Bold", size: 20))
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 16)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color.textSecondary)
+                                    )
+                            }
+                        }
+                        .padding(30)
+                        .background(
+                            RoundedRectangle(cornerRadius: 32)
+                                .fill(Color.white)
+                                .shadow(color: Color.black.opacity(0.2), radius: 30, y: 15)
+                        )
+                        .padding(.horizontal, 24)
+                        .transition(.move(edge: .bottom).combined(with: .opacity).combined(with: .scale(scale: 0.9)))
+                    }
+                    .zIndex(100)
+                }
             }
             .navigationBarHidden(true)
             .sheet(item: $selectedTier) { tier in
@@ -77,6 +150,18 @@ struct DashboardView: View {
                     .environmentObject(gameState)
                 }
             }
+            .onAppear {
+                if !Self.hasSeenDisclaimer{
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                                            showDisclaimer = true
+                                            playHaptic(style: .heavy)
+                                        }
+                                    }
+                                    // Tandai bahwa user sudah melihatnya di sesi ini
+                                    Self.hasSeenDisclaimer = true
+                                }
+            }
         }
     }
     
@@ -84,9 +169,19 @@ struct DashboardView: View {
     private var headerSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("MentorDex")
-                    .font(.custom("Fredoka-Bold", size: 36))
-                    .foregroundColor(Color.textPrimary)
+                Button {
+                    playHaptic(style: .light)
+                    playSound("click")
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        showDisclaimer = true
+                    }
+                } label: {
+                    Image("textrata")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 100) // Sesuaikan angkanya jika logonya kurang besar atau terlalu besar
+                        .shadow(color: Color(hex: "#1A4A6B").opacity(0.1), radius: 5, y: 2) // Tambahan shadow tipis agar makin 3D
+                }
             }
             
             Spacer()
@@ -98,10 +193,10 @@ struct DashboardView: View {
                 ZStack {
                     Circle()
                         .fill(Color.white)
-
+                    
                         .shadow(color: Color(hex: "#90C2E7").opacity(0.3), radius: 10, y: 5)
                         .frame(width: 54, height: 54)
-
+                    
                     Image(systemName: audioManager.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                         .font(.system(size: 22))
                         .foregroundColor(audioManager.isMuted ? Color.gray.opacity(0.5) : Color.textPrimary)
@@ -109,7 +204,7 @@ struct DashboardView: View {
             }
         }
         .padding(.horizontal, 24)
-        .padding(.top, 16)
+//        .padding(.top, 5)
         
         .onAppear {
             AudioManager.shared.startBackgroundMusic(filename: "main-bgm")
@@ -119,7 +214,7 @@ struct DashboardView: View {
     // Unopened Pack Section
     @ViewBuilder
     private var unopenedPacksSection: some View {
-        // Ambil tier unik yang ada di dalam stash
+        
         let stashedTiers = ChallengeTier.allCases.filter { tier in
             gameState.unopenedPacks.contains(tier)
         }
@@ -308,9 +403,11 @@ struct PackCard: View {
     let onTap: () -> Void
     
     @State private var pressed = false
+    @State private var isBouncing = false
     
     var body: some View {
         Button(action: {
+            playSound("click")
             withAnimation(.spring(response: 0.25, dampingFraction: 0.55)) {
                 pressed = true
             }
@@ -336,8 +433,31 @@ struct PackCard: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 380, height: 200)
-                        .shadow(color: Color.textPrimary.opacity(0.15), radius: 10, y: 8)
+                        .offset(y: isBouncing ? -12 : 0)
+                        .scaleEffect(isBouncing ? 1.05 : 1.0)
+                        .shadow(color: Color.textPrimary.opacity(0.15), radius: 10, y: isBouncing ? 15 : 8)
                     
+                    //
+                        .task {
+                            try? await Task.sleep(nanoseconds: UInt64(tier.rawValue) * 300_000_000)
+                            
+                            while !Task.isCancelled {
+                                // Fase 1: Melompat ke atas
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                    isBouncing = true
+                                }
+                                
+                                try? await Task.sleep(nanoseconds: 200_000_000) // Tahan di atas selama 0.2 detik
+                                
+                                // Fase 2: Mendarat kembali
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
+                                    isBouncing = false
+                                }
+                                
+                                // Fase 3: Diam selama 1.8 detik sebelum mengulang (Total siklus 2 detik)
+                                try? await Task.sleep(nanoseconds: 3_500_000_000)
+                            }
+                        }
                 }
                 .frame(width: 200, height: 190)
                 
@@ -499,7 +619,26 @@ struct PathButton: View {
     }
 }
 
-#Preview {
-    DashboardView()
-        .environmentObject(GameState())
+// MARK: - Disclaimer Row Component
+struct DisclaimerRow: View {
+    let number: String
+    let text: String
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 16) {
+            // Lingkaran Angka
+            Text(number)
+                .font(.custom("Fredoka-Bold", size: 16))
+                .foregroundColor(.white)
+                .frame(width: 32, height: 32)
+                .background(Circle().fill(Color(hex: "#82BBDD")))
+            
+            // Teks Penjelasan
+            Text(text)
+                .font(.custom("Fredoka-Regular", size: 15))
+                .foregroundColor(Color.textSecondary)
+                .lineSpacing(4)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
 }
