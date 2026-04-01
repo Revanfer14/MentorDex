@@ -8,14 +8,14 @@ MentorDex is a Pokémon-inspired iOS card-collecting app built for the **Apple D
 
 ## Features
 
-- **Gacha Pack System** — Three tiers of booster packs (Starter, Pro, Legendary), each with different card counts and drop rates
-- **AI-Powered Trivia** — Questions generated on-device using Apple's `FoundationModels` framework (`@Generable`), with native math fallback
-- **3D Pack Unboxing** — Swipe-to-tear pack opening animation with a SceneKit (`SCNView`) 3D model
-- **Holographic Cards** — Epic & Legendary cards feature a CoreMotion-driven gyroscope hologram effect with `colorDodge` blend mode
-- **Card Gallery** — 18 mentor cards across Common, Epic, and Legendary grades with grade-upgrade logic
-- **Pack Inventory (Stash)** — Save earned packs to open later; persisted via `UserDefaults`
-- **Background Music** — `AVAudioPlayer` looping BGM with mute toggle, persisted across sessions
-- **Splash Screen** — Animated booster pack entrance with spring physics and ripple pulse
+- Coin Economy & Shop — Earn coins exponentially through 5-round trivia sessions to purchase booster packs.
+- Gacha Pack System — Three tiers of packs (Starter, Pro, Legendary) with balanced drop rates and guaranteed Epic slots.
+- Hybrid Trivia Engine — Dynamic questions combining on-device AI (FoundationModels), native math algorithms, and local Academy lore.
+- 3D Pack Unboxing — Swipe-to-tear pack opening animation with a SceneKit (SCNView) 3D model.
+- Holographic Cards — Epic & Legendary cards feature a CoreMotion-driven gyroscope hologram effect with colorDodge blend mode.
+- Card Gallery — 60 collectible cards (20 mentors × 3 grades) with duplicate-upgrade logic.
+- Pack Inventory (Stash) — Save purchased packs to open later; persisted via UserDefaults.
+- Immersive Experience — Looping BGM (AVAudioPlayer), haptic feedback, custom confirmation pop-ups, and an animated Splash Screen.
 
 ---
 
