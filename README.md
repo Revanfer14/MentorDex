@@ -77,7 +77,7 @@ Questions are generated on-device via **Apple Intelligence** (`LanguageModelSess
 
 ---
 
-## Assets & Credits
+## Assets
 
 ### Mentor Photos
 All mentor portrait images are sourced from open platforms (mostly [Linkedin](https://linkedin.com)) and are used for educational, non-commercial purposes within the Academy context.
@@ -96,6 +96,18 @@ The booster pack 3D model (`.usdz`) is a free asset by **Ben Abode**:
 - Background musics & sound effects are from open source websites (mostly [Pixabay](https://pixabay.com/))
 
 ---
+
+## Legal & Copyright Disclaimer
+
+**MentorDex** is an educational, non-commercial student project. It is strictly built for learning, portfolio demonstration, and internal community engagement.
+
+This project draws heavy visual and conceptual inspiration from existing intellectual properties:
+* **Pokémon, Pikachu, Poké Ball, and the Pokédex concept** are registered trademarks and copyrights of Nintendo, Creatures Inc., and GAME FREAK inc.
+* The **Apple Logo** is a registered trademark of Apple Inc.
+
+**No copyright infringement is intended.** This project is not affiliated with, endorsed, sponsored, or specifically approved by Nintendo, The Pokémon Company, or Apple Inc. Absolutely no financial profit is generated from this application. All original rights to the characters, designs, and names belong to their respective intellectual property owners.
+
+*If you are the copyright holder of any intellectual property used in this repository and wish for its removal, please contact me, and the requested content will be taken down immediately.*
 
 ## License
 
