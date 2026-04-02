@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 // MARK: - Gallery View
 
@@ -110,11 +111,12 @@ struct GalleryView: View {
     private var galleryHeader: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Your Collection")
+                Text("My Collection")
                     .font(.custom("Fredoka-Bold", size: 32))
                     .foregroundColor(Color.textPrimary)
+                    .popoverTip(GalleryTip(), arrowEdge: .top)
                 
-                Text("\(gameState.unlockedCount) of 19 cards collected")
+                Text("\(gameState.unlockedCount) of 20 cards collected")
                     .font(.custom("Fredoka-Regular", size: 16))
                     .foregroundColor(Color.textSecondary)
             }
@@ -131,7 +133,7 @@ struct GalleryView: View {
                     .stroke(Color(hex: "#E8F4FA"), lineWidth: 5)
                 
                 Circle()
-                    .trim(from: 0, to: CGFloat(gameState.unlockedCount) / CGFloat(18.0))
+                    .trim(from: 0, to: CGFloat(gameState.unlockedCount) / CGFloat(20.0))
                     .stroke(
                         LinearGradient(colors: [Color.textPrimary, Color.textPrimary], startPoint: .topLeading, endPoint: .bottomTrailing),
                         style: StrokeStyle(lineWidth: 5, lineCap: .round)
@@ -139,7 +141,7 @@ struct GalleryView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.spring(response: 0.6, dampingFraction: 0.7), value: gameState.unlockedCount)
                 
-                Text("\(Int(Double(gameState.unlockedCount) / Double(19.0) * 100))%")
+                Text("\(Int(Double(gameState.unlockedCount) / Double(20.0) * 100))%")
                     .font(.custom("Fredoka-Bold", size: 15))
                     .foregroundColor(Color.textPrimary)
             }

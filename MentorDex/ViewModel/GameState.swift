@@ -10,21 +10,17 @@ import Combine
 
 @MainActor
 class GameState: ObservableObject {
-
-    // MARK: - Published State
-
     @Published var gallery: [GalleryEntry] = []
     @Published var pendingRewardCards: [RewardCard] = []
     @Published var isShowingPackOpening: Bool = false
     @Published var currentTab: AppTab = .dashboard
-    
-    // 🌟 NEW: Inventory Sistem untuk menabung Pack
     @Published var unopenedPacks: [ChallengeTier] = []
+    @Published var coins: Int = 0
 
     // MARK: - Computed
 
     var unlockedCount: Int { gallery.filter { $0.isUnlocked }.count }
-    var totalCards: Int { 54 } // 18 mentors × 3 grades
+    var totalCards: Int { 60 }
 
     // MARK: - Init
 
@@ -37,6 +33,20 @@ class GameState: ObservableObject {
         gallery = Mentor.sampleData.map { mentor in
             GalleryEntry(mentor: mentor, grade: .common, isUnlocked: false)
         }
+    }
+    
+    func addCoins(_ amount: Int) {
+        coins += amount
+        saveState()
+    }
+    
+    func spendCoins(_ amount: Int) -> Bool {
+        if(coins >= amount) {
+            coins -= amount
+            saveState()
+            return true
+        }
+        return false
     }
 
     // MARK: - Pack Management & Reward Distribution
@@ -52,20 +62,40 @@ class GameState: ObservableObject {
         unopenedPacks.append(tier)
         saveState()
     }
+    
+    func removePackFromInventory(tier: ChallengeTier) {
+            if let index = unopenedPacks.firstIndex(of: tier) {
+                unopenedPacks.remove(at: index)
+                saveState()
+            }
+        }
 
-    func distributeRewards(tier: ChallengeTier) -> [RewardCard] {
+    func openPack(tier: ChallengeTier) -> [RewardCard] {
         var rewards: [RewardCard] = []
-        let count = tier.cardRewardCount
         let allMentors = Mentor.sampleData
+        
+        let count: Int
+        let guaranteedEpic: Bool
+
+        switch tier {
+                case .tier1:
+                    count = tier.cardRewardCount
+                    guaranteedEpic = false
+                case .tier2:
+                    count = tier.cardRewardCount
+                    guaranteedEpic = false
+                case .tier3:
+                    count = tier.cardRewardCount
+                    guaranteedEpic = true
+                }
 
         for i in 0..<count {
             let grade: CardGrade
             
-            // Aturan khusus Tier 3: Kartu pertama DIJAMIN Epic (Atau Legendary kalau mau berbaik hati, tapi kita set Epic pasti)
-            if tier.guaranteedEpic && i == 0 {
-                grade = .epic
+            if guaranteedEpic && i == 0 {
+                let roll = Double.random(in: 0...1)
+                grade = roll < 0.95 ? .epic : .legendary
             } else {
-                // Sisa kartu diundi berdasarkan probabilitas tier
                 grade = drawGrade(for: tier)
             }
             
@@ -74,7 +104,6 @@ class GameState: ObservableObject {
             rewards.append(reward)
         }
 
-        // Apply to gallery
         for reward in rewards { applyReward(reward) }
         return rewards
     }
@@ -82,11 +111,25 @@ class GameState: ObservableObject {
     // MARK: - Gacha Probability Logic
     private func drawGrade(for tier: ChallengeTier) -> CardGrade {
         let roll = Double.random(in: 0...1)
-        let rates = tier.dropRates
         
-        if roll < rates.commonRate {
+        let commonRate: Double
+        let epicRate: Double
+        
+        switch tier {
+        case .tier1:
+            commonRate = 0.92
+            epicRate = 0.07
+        case .tier2:
+            commonRate = 0.85
+            epicRate = 0.12
+        case .tier3:
+            commonRate = 0.73
+            epicRate = 0.22
+        }
+        
+        if roll < commonRate {
             return .common
-        } else if roll < (rates.commonRate + rates.epicRate) {
+        } else if roll < (commonRate + epicRate) {
             return .epic
         } else {
             return .legendary
@@ -116,6 +159,7 @@ class GameState: ObservableObject {
 
     private let galleryKey = "gallery_v2"
     private let packsKey = "unopened_packs_v1" // Key untuk simpan inventory
+    private let coinsKey = "user_coins_v1"
 
     func saveState() {
         if let encoded = try? JSONEncoder().encode(gallery) {
@@ -124,6 +168,8 @@ class GameState: ObservableObject {
         if let encodedPacks = try? JSONEncoder().encode(unopenedPacks) {
             UserDefaults.standard.set(encodedPacks, forKey: packsKey)
         }
+        
+        UserDefaults.standard.set(coins, forKey: coinsKey)
     }
 
     func loadSavedState() {
@@ -139,6 +185,8 @@ class GameState: ObservableObject {
            let decodedPacks = try? JSONDecoder().decode([ChallengeTier].self, from: packData) {
             unopenedPacks = decodedPacks
         }
+        
+        coins = UserDefaults.standard.integer(forKey: coinsKey)
     }
 }
 

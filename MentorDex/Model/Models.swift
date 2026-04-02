@@ -49,9 +49,9 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
     
     var cardRewardCount: Int {
         switch self {
-        case .tier1: return 1
-        case .tier2: return 2
-        case .tier3: return 3
+        case .tier1: return 4
+        case .tier2: return 7
+        case .tier3: return 10
         }
     }
     
@@ -83,9 +83,9 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
     
     var chances: String {
         switch self {
-        case .tier1: return "89% Common, 10% Epic, 1% Legendary"
-        case .tier2: return "82% Common, 15% Epic, 3% Legendary"
-        case .tier3: return "1 Guaranteed Epic \n 85% Common, 10% Epic, 5% Legendary"
+        case .tier1: return "92% Common, 7% Epic, 1% Legendary"
+                case .tier2: return "80% Common, 17% Epic, 3% Legendary"
+                case .tier3: return "1 Guaranteed Epic/Legendary\n70% Common, 25% Epic, 5% Legendary"
         }
     }
     
@@ -94,6 +94,14 @@ enum ChallengeTier: Int, CaseIterable, Identifiable, Codable {
         case .tier1: return Color.starterpack
         case .tier2: return Color.propack
         case .tier3: return Color.legendpack
+        }
+    }
+    
+    var packPrice: Int {
+        switch self {
+        case .tier1: return 10
+        case .tier2: return 20
+        case .tier3: return 35
         }
     }
     
@@ -218,6 +226,9 @@ extension Mentor {
         
         Mentor(id: 18, nickname: "Ko Octa",name: "Octavianus Gandajaya", role: "Tech Mentor", career: "Tech Mentor for 9 years", education: ["S1 Binus University"], hobby: ["Console Gaming", "Discovering new tech"], funFact: ["Climbed Rinjani Mountain on 1st climbing", "Dived 15m deep on 1st diving"], mentorImage: "koocta", accentColor: "#FFD4B8"),
         
-        Mentor(id: 19, nickname: "Ci Del" , name: "Delvina Janice", role: "Tech Mentor", career: "Ex iOS Engineer at Ajaib", education: ["(Unknown)"], hobby: ["Crochet", "Gaming"], funFact: ["Ex Ballerina", "Alumni of ADA Cohort 4"], mentorImage: "cidel", accentColor: "#FFB8C6")
+        Mentor(id: 19, nickname: "Ci Del" , name: "Delvina Janice", role: "Tech Mentor", career: "Ex iOS Engineer at Ajaib", education: ["(Unknown)"], hobby: ["Crochet", "Gaming"], funFact: ["Ex Ballerina", "Alumni of ADA Cohort 4"], mentorImage: "cidel", accentColor: "#FFB8C6"),
+        
+        Mentor(id: 20, nickname: "Ka Eko" , name: "Eko Cahyo Prihantoro", role: "Design Mentor", career: "Ex Interaction Designer at Traveloka", education: ["S1 Institut Teknologi Bandung"], hobby: ["Main Tamiya"], funFact: ["Mirip Praz Teguh", "Alumni of ADA Cohort 3"], mentorImage: "kaeko", accentColor: "#FFB8C6")
     ]
 }
+

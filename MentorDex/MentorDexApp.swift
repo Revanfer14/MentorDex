@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct MentorDexApp: App {
     @StateObject private var gameState = GameState()
+    
+    init() {
+        try? Tips.configure([
+            .displayFrequency(.immediate),
+            .datastoreLocation(.applicationDefault)
+        ])
+    }
     
     var body: some Scene {
         WindowGroup {

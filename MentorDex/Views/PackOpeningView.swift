@@ -66,7 +66,7 @@ struct PackOpeningView: View {
         .ignoresSafeArea()
         .navigationBarHidden(true)
         .onAppear {
-            AudioManager.shared.playBGM(filename: "musicbukapack", forcePlay: true)
+            playMusic("musicbukapack", true)
             startIdleAnimations()
         }
         .onDisappear {
@@ -308,11 +308,7 @@ struct PackOpeningView: View {
                         .font(.custom("Fredoka-Bold", size: 22))
                         .foregroundColor(.white)
                         .padding(.horizontal, 50).padding(.vertical, 18)
-                        .background(
-                            Capsule()
-                                .fill(Color(hex: "#42A5F5"))
-                                .shadow(color: Color(hex: "#42A5F5").opacity(0.4), radius: 15, y: 8)
-                        )
+                        .background(Capsule().fill(Color.textSecondary))
                 }
                 .padding(.top, 16)
             }
@@ -550,7 +546,7 @@ struct SpinningRevealCard: View {
             } else {
                 // Getaran ringan untuk Common
                 playSound("dapetcommon")
-                playHaptic(style: .heavy, intensity: 0.8)
+                playHaptic(style: .light)
             }
         }
         

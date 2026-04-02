@@ -1,0 +1,107 @@
+//
+//  QuestionBank.swift
+//  MentorDex
+//
+//  Created by Revan Ferdinand on 01/04/26.
+//
+
+struct LocalQuestion {
+    let question: String
+    let correct: String
+    let wrongs: [String]
+}
+
+struct QuestionBank {
+    static let all: [LocalQuestion] = [
+        LocalQuestion(question: "Apa metode pembelajaran utama yang digunakan di Apple Developer Academy?", correct: "Challenge Based Learning", wrongs: ["Problem Based Learning", "Design Thinking Sprints", "Agile Development Method"]),
+        LocalQuestion(question: "Di negara manakah Apple Developer Academy pertama kali didirikan pada tahun 2013?", correct: "Brazil", wrongs: ["Amerika Serikat", "Italia", "Arab Saudi"]),
+        LocalQuestion(question: "Apa tiga pilar keahlian utama yang difokuskan di Academy?", correct: "Coding, Design, Professional Skills", wrongs: ["Tech, UI/UX, Product", "Tech, Design, Business", "Coding, UI/UX, Business"]),
+        LocalQuestion(question: "Selain BSD, Surabaya, dan Batam, di manakah lokasi terbaru Academy di Indonesia?", correct: "Bali", wrongs: ["Bandung", "Yogyakarta", "Medan"]),
+        LocalQuestion(question: "Dalam kerangka kerja CBL, apa 3 tahapan utamanya?", correct: "Engage, Investigate, Act", wrongs: ["Empathize, Define, Ideate", "Plan, Execute, Review", "Discover, Design, Deploy"]),
+        LocalQuestion(question: "Pada tahun berapa Apple Developer Academy pertama kali hadir di Indonesia (BSD)?", correct: "2018", wrongs: ["2016", "2019", "2020"]),
+        LocalQuestion(question: "Di manakah lokasi Apple Developer Academy pertama di benua Eropa?", correct: "Naples, Italia", wrongs: ["London, Inggris", "Paris, Prancis", "Sao Paulo, Brasil"]),
+        LocalQuestion(question: "Aplikasi pengembangan terintegrasi (IDE) resmi dari Apple untuk membuat aplikasi adalah?", correct: "Xcode", wrongs: ["VS Code", "Swift Playground", "IntelliJ IDEA"]),
+        LocalQuestion(question: "Apa nama framework antarmuka pengguna (UI) deklaratif yang saat ini menjadi standar Apple?", correct: "SwiftUI", wrongs: ["UIKit", "Interface Builder", "CoreAnimation"]),
+        LocalQuestion(question: "Berapa lama durasi normal program Apple Developer Academy di Indonesia?", correct: "10 Bulan", wrongs: ["6 Bulan", "12 Bulan", "4 Bulan"]),
+        LocalQuestion(question: "Sebutan untuk posisi ahli yang mendampingi dan membimbing learners di Academy adalah?", correct: "Mentor", wrongs: ["Dosen", "Guru", "Instruktur"]),
+        LocalQuestion(question: "Apa bahasa pemrograman utama yang diajarkan di Apple Developer Academy?", correct: "Swift", wrongs: ["Objective-C", "C++", "Python"]),
+        LocalQuestion(question: "Titik awal dari setiap perjalanan Challenge Based Learning yang bersifat luas, universal, dan penting bagi komunitas disebut?", correct: "Big Idea", wrongs: ["Essential Question", "Challenge", "Action Plan"]),
+        LocalQuestion(question: "Dalam CBL, pertanyaan yang menjembatani antara Big Idea dan Challenge, serta membantu mengerucutkan fokus penyelesaian masalah disebut?", correct: "Essential Question", wrongs: ["Guiding Question", "Focus Question", "Fundamental Question"]),
+        LocalQuestion(question: "Aktivitas spesifik seperti wawancara, survei, atau riset yang dilakukan untuk menjawab Guiding Questions dalam fase Investigate disebut?", correct: "Guiding Activities", wrongs: ["Research Actions", "Discovery Tasks", "Investigation Steps"]),
+        LocalQuestion(question: "Sumber daya, narasumber, atau referensi jurnal yang digali oleh learners untuk mencari jawaban di fase Investigate disebut?", correct: "Guiding Resources", wrongs: ["Investigation Assets", "Learning Materials", "Research Data"]),
+        LocalQuestion(question: "Setelah mengumpulkan hasil dari Guiding Activities, langkah selanjutnya yang dilakukan learners untuk menyusun ide solusi adalah?", correct: "Synthesis (Sintesis)", wrongs: ["Prototyping", "Pitching", "Deploying"]),
+        LocalQuestion(question: "Di Apple Developer Academy, challenge pertama yang biasanya berdurasi sangat singkat (1-2 minggu) untuk pemanasan disebut?", correct: "Nano Challenge", wrongs: ["Micro Challenge", "Mini Sprint", "Intro Challenge"]),
+        LocalQuestion(question: "Challenge berskala menengah di Academy yang biasanya berfokus pada integrasi spesifik framework Apple atau arsitektur kode disebut?", correct: "Mini Challenge", wrongs: ["Core Challenge", "Feature Sprint", "Macro Challenge"]),
+        LocalQuestion(question: "Salah satu nilai inti (core value) Apple yang sangat ditekankan di Academy agar aplikasi dapat digunakan oleh semua orang tanpa hambatan fisik adalah?", correct: "Accessibility", wrongs: ["Exclusivity", "Productivity", "Efficiency"]),
+        LocalQuestion(question: "Slogan 'What happens on your iPhone, stays on your iPhone' merepresentasikan salah satu pilar utama Apple yaitu?", correct: "Privacy", wrongs: ["Security", "Encryption", "Anonymity"]),
+        LocalQuestion(question: "Universitas yang menjadi mitra Apple dalam mendirikan Developer Academy pertama di benua Eropa (Naples, Italia) adalah?", correct: "University of Naples Federico II", wrongs: ["Sapienza University of Rome", "University of Milan", "Politecnico di Milano"]),
+        LocalQuestion(question: "Di bulan apakah Apple secara rutin menyelenggarakan acara Worldwide Developers Conference (WWDC) setiap tahunnya?", correct: "Juni", wrongs: ["September", "Oktober", "Maret"]),
+        LocalQuestion(question: "Pada tahun berapa bahasa pemrograman Swift pertama kali diperkenalkan secara publik di panggung WWDC?", correct: "2014", wrongs: ["2012", "2015", "2010"]),
+        LocalQuestion(question: "Framework antarmuka SwiftUI pertama kali diumumkan dan dirilis oleh Apple pada acara WWDC tahun?", correct: "2019", wrongs: ["2018", "2020", "2017"]),
+        LocalQuestion(question: "Desain ikon aplikasi iOS (App Icon) tidak diperbolehkan menggunakan efek transparansi. Apple HIG menyebut format ikon ini harus bersifat?", correct: "Opaque", wrongs: ["Translucent", "Vectorized", "Alpha-blended"]),
+        LocalQuestion(question: "Sebutan untuk acara puncak pameran aplikasi akhir dari para learners di Apple Developer Academy adalah?", correct: "App Showcase", wrongs: ["Demo Day", "Pitching Fest", "WWDC Local"]),
+
+        LocalQuestion(question: "Dalam tahapan 'Engage' pada kerangka kerja CBL, urutan komponen yang benar adalah?", correct: "Big Idea, Essential Question, Challenge", wrongs: ["Challenge, Guiding Questions, Solution", "Big Idea, Research, Prototype", "Empathize, Define, Ideate"]),
+        LocalQuestion(question: "Dalam CBL, setelah menentukan 'Challenge', langkah pertama yang dilakukan pada fase 'Investigate' adalah menentukan?", correct: "Guiding Questions", wrongs: ["Action Plan", "Solution Concept", "User Persona"]),
+        LocalQuestion(question: "Proses mengimplementasikan solusi di dunia nyata dan mengukur dampaknya dalam CBL berada pada fase?", correct: "Act", wrongs: ["Engage", "Investigate", "Reflect"]),
+        LocalQuestion(question: "Proyek akhir berskala besar yang dikerjakan selama beberapa bulan di Academy disebut?", correct: "Macro Challenge", wrongs: ["Final Challenge", "Capstone Project", "Mega Challenge"]),
+        LocalQuestion(question: "Pada bulan dan tahun berapa Apple Developer Academy pertama di benua Asia (BSD) resmi dibuka?", correct: "Mei 2018", wrongs: ["Agustus 2017", "Januari 2019", "Maret 2018"]),
+        LocalQuestion(question: "Apple Developer Academy @ Infinite Learning terletak di kota mana?", correct: "Batam", wrongs: ["Surabaya", "Bali", "Tangerang"]),
+        LocalQuestion(question: "Apple Developer Academy ketiga di Indonesia berlokasi di kampus Universitas Ciputra di kota?", correct: "Surabaya", wrongs: ["Batam", "Tangerang", "Bali"]),
+        LocalQuestion(question: "Siapa CEO Apple yang berkunjung ke Indonesia pada April 2024 untuk meresmikan ekspansi Academy keempat di Bali?", correct: "Tim Cook", wrongs: ["Craig Federighi", "Greg Joswiak", "Phil Schiller"]),
+        LocalQuestion(question: "Hadiah utama bagi pemenang 'Distinguished Winners' di ajang Swift Student Challenge (SSC) adalah?", correct: "Undangan eksklusif ke Apple Park", wrongs: ["MacBook Pro M3 Max", "Uang Tunai $10000", "Airpods Pro"]),
+        LocalQuestion(question: "Berdasarkan Apple HIG, berapa ukuran area sentuh (tappable area) minimum yang direkomendasikan untuk layar sentuh?", correct: "44x44 pt", wrongs: ["48x48 pt", "32x32 pt", "50x50 pt"]),
+        LocalQuestion(question: "Font sistem bawaan standar yang didesain Apple untuk keterbacaan tinggi di iOS dan macOS adalah?", correct: "San Francisco (SF)", wrongs: ["Helvetica Neue", "Roboto", "Avenir Next"]),
+        LocalQuestion(question: "Sistem desain warna yang direkomendasikan Apple agar aplikasi dapat otomatis beradaptasi dengan Light/Dark Mode disebut?", correct: "Semantic Colors", wrongs: ["Absolute Hex", "RGB Dynamic", "Auto Tinting"]),
+        LocalQuestion(question: "Di iOS, komponen antarmuka yang muncul meluncur dari bawah layar untuk menyajikan konten tambahan disebut?", correct: "Sheet", wrongs: ["Modal", "Popover", "Alert"]),
+        LocalQuestion(question: "Manakah property wrapper di SwiftUI yang digunakan untuk membagikan data objek secara global ke seluruh hierarki View?", correct: "@EnvironmentObject", wrongs: ["@State", "@Binding", "@ObservedObject"]),
+        LocalQuestion(question: "Di SwiftUI, property wrapper apa yang digunakan untuk membuat komunikasi data dua arah (two-way connection) dengan state milik parent view?", correct: "@Binding", wrongs: ["@State", "@Published", "@StateObject"]),
+        LocalQuestion(question: "Di Swift, tipe data collection apa yang menyimpan elemen-elemen unik tanpa urutan (unordered) tertentu?", correct: "Set", wrongs: ["Array", "Dictionary", "Tuple"]),
+        LocalQuestion(question: "Fungsi di Swift yang digunakan untuk menangani error (error handling) secara eksplisit harus ditandai dengan keyword?", correct: "throws", wrongs: ["catches", "fails", "error"]),
+        LocalQuestion(question: "Dalam Swift, teknik mengamankan nilai dari tipe Optional agar aplikasi tidak crash (optional binding) biasanya menggunakan?", correct: "guard let / if let", wrongs: ["try catch", "switch case", "defer nil"]),
+        LocalQuestion(question: "View modifier modern di SwiftUI yang direkomendasikan Apple untuk menyembunyikan Navigation Bar adalah?", correct: ".toolbar(.hidden)", wrongs: [".hideNavBar()", ".navigationBarHidden(true)", ".setNavigationBar(false)"]),
+        LocalQuestion(question: "Apa nama arsitektur desain pattern yang secara tradisional digunakan dan direkomendasikan Apple sebelum era SwiftUI (UIKit)?", correct: "MVC", wrongs: ["MVVM", "VIPER", "Clean Architecture"]),
+
+        LocalQuestion(question: "Framework bawaan Apple yang dikhususkan untuk mendukung fitur screen reader bagi pengguna tunanetra adalah?", correct: "VoiceOver", wrongs: ["TalkBack", "SpeakScreen", "VoiceControl"]),
+        LocalQuestion(question: "Di ekosistem Apple, framework berbasis Machine Learning yang digunakan untuk mendeteksi wajah, teks, dan objek pada gambar adalah?", correct: "Vision", wrongs: ["Core ML", "ARKit", "Metal"]),
+        LocalQuestion(question: "Framework Apple yang digunakan untuk menyimpan data secara persisten dan mengelola model objek (database lokal) adalah?", correct: "Core Data", wrongs: ["UserStore", "CloudKit", "AppStorage"]),
+        LocalQuestion(question: "Portal berbasis web yang digunakan developer untuk mengelola aplikasi, melihat analitik, dan men-submit aplikasi ke App Store adalah?", correct: "App Store Connect", wrongs: ["Apple Developer Portal", "TestFlight Dashboard", "Xcode Cloud"]),
+        LocalQuestion(question: "Aplikasi milik Apple yang digunakan developer untuk mendistribusikan aplikasi versi beta kepada tester sebelum rilis publik adalah?", correct: "TestFlight", wrongs: ["BetaApp", "Apple Flight", "SwiftTest"]),
+        LocalQuestion(question: "WWDC adalah konferensi tahunan terbesar Apple. Kepanjangan dari WWDC adalah?", correct: "Worldwide Developers Conference", wrongs: ["World Web Developers Competition", "Worldwide Design & Development Conference", "World Wide Developer Competition"]),
+        LocalQuestion(question: "Chip silikon arsitektur ARM buatan Apple (Apple Silicon) yang pertama kali dirilis untuk komputer Mac pada tahun 2020 adalah?", correct: "M1", wrongs: ["A14 Bionic", "M2", "Intel Core i9"]),
+        LocalQuestion(question: "Di platform Xcode, alat yang digunakan untuk memantau performa aplikasi seperti penggunaan CPU, Memory, dan kebocoran memori (leaks) disebut?", correct: "Instruments", wrongs: ["Activity Monitor", "Performance Profiler", "Debug Gauge"]),
+        LocalQuestion(question: "Sebutan untuk komponen visual di layar beranda iOS (Home Screen) yang dapat menampilkan data aplikasi secara ringkas tanpa membuka aplikasi adalah?", correct: "Widget", wrongs: ["App Clip", "Live Activity", "Shortcut"]),
+        LocalQuestion(question: "Fitur di iOS yang memungkinkan pengguna mengakses sebagian kecil fungsi aplikasi dengan cepat (misal: via scan QR Code) tanpa harus mengunduh aplikasi penuh adalah?", correct: "App Clip", wrongs: ["Mini App", "Quick Launch", "Instant App"]),
+        
+        LocalQuestion(question: "Siapa mentor yang punya fun fact unik: 'Punya doggy yang suka ngempeng'?", correct: "Ko Jacob", wrongs: ["Ko Octa", "Ko Wilchris", "Ka Toya"]),
+        LocalQuestion(question: "Mantan 'Star Seller Shopee' dengan lebih dari 200 ribu produk terjual adalah?", correct: "Ci Jes", wrongs: ["Ci Valen", "Ci Meicy", "Ka Ria"]),
+        LocalQuestion(question: "Siapa Co-Head of Academy yang alergi cabe tapi sangat suka keju?", correct: "Ko Phil", wrongs: ["Ka Ica", "Ko Hen", "Ko Har"]),
+        LocalQuestion(question: "Mentor desain mana yang hafal lagu pop 90-an dan membanggakan 'balkon apartemen paling hijau'?", correct: "Ka Rima", wrongs: ["Ci Meicy", "Ka Afi", "Ka Ria"]),
+        LocalQuestion(question: "Tech Mentor yang dulunya adalah penari tradisional Jawa sekaligus Kpop dancer adalah?", correct: "Ka Khoi", wrongs: ["Ci Del", "Ci Jes", "Ci Valen"]),
+        LocalQuestion(question: "Tech Mentor yang sudah bermain game FIFA sejak tahun 2006 dan sangat menyukai Secbowl adalah?", correct: "Ka Rizqi", wrongs: ["Ko Octa", "Ko Wil Sjah", "Ka Eko"]),
+        LocalQuestion(question: "Product & Growth Mentor yang merupakan seorang 'adrenaline junkie' dan pernah memakan serangga?", correct: "Ci Valen", wrongs: ["Ka Ica", "Ci Jes", "Ka Rima"]),
+        LocalQuestion(question: "Siapa Tech Mentor yang masuk dalam jajaran Top 0.001% pendengar Taylor Swift di Spotify?", correct: "Ko Wilchris", wrongs: ["Ko Jacob", "Ko Luq", "Ko Har"]),
+        LocalQuestion(question: "Mentor desain yang pernah melakukan 'bike tour' keliling New York City adalah?", correct: "Ko Luq", wrongs: ["Ko Phil", "Ka Eko", "Ko Hen"]),
+        LocalQuestion(question: "Co-Head of Academy yang saat kecil pernah tenggelam di Pangandaran dan dipanggil 'Unyil'?", correct: "Ka Ica", wrongs: ["Ci Valen", "Ci Meicy", "Ka Khoi"]),
+        LocalQuestion(question: "Siapa mentor pemenang WWDC 2021 yang surat fanmail-nya dibalas oleh Daniel Radcliffe & Emma Watson?", correct: "Ka Afi", wrongs: ["Ka Ica", "Ka Khoi", "Ci Valen"]),
+        LocalQuestion(question: "Tech mentor lulusan universitas di Seoul ini punya fun fact unik sebagai 'Chicken Farmer', siapakah dia?", correct: "Ka Toya", wrongs: ["Ko Har", "Ko Octa", "Ko Jacob"]),
+        LocalQuestion(question: "Siapa Tech Mentor yang berhasil mendaki Gunung Rinjani pada pengalaman pendakian pertamanya?", correct: "Ko Octa", wrongs: ["Ko Hen", "Ka Rizqi", "Ko Wil Sjah"]),
+        LocalQuestion(question: "Mantan balerina yang kini bekerja sebagai Tech Mentor dan merupakan alumni ADA Cohort 4 adalah?", correct: "Ci Del", wrongs: ["Ci Jes", "Ka Khoi", "Ka Afi"]),
+        LocalQuestion(question: "Siapa mentor yang pernah memenangkan medali emas di tingkat universitas untuk bela diri (Martial Arts)?", correct: "Ko Har", wrongs: ["Ko Wil Sjah", "Ko Octa", "Ko Phil"]),
+        LocalQuestion(question: "Mentor desain yang sangat menyukai semua olahan tahu dan mudah terdistraksi oleh suara adalah?", correct: "Ci Meicy", wrongs: ["Ka Ica", "Ka Ria", "Ka Afi"]),
+        LocalQuestion(question: "Siapa Product & Growth Mentor yang memiliki kondisi Color Blind Partial dan gemar memakai topi?", correct: "Ko Hen", wrongs: ["Ko Wil Sjah", "Ko Har", "Ko Octa"]),
+        LocalQuestion(question: "Mentor yang gemar bermain Street Fighter dan pernah bekerja di Jepang (Mizuho & Mirai LLP) adalah?", correct: "Ko Wil Sjah", wrongs: ["Ko Luq", "Ko Jacob", "Ka Toya"]),
+        LocalQuestion(question: "Design Mentor lulusan Binus yang bisa bahasa Arab dan saat kuliah hanya ada 6 perempuan di angkatannya?", correct: "Ka Ria", wrongs: ["Ka Rima", "Ci Meicy", "Ci Del"]),
+        LocalQuestion(question: "Design Mentor alumni ITB yang sering dibilang mirip dengan komika Praz Teguh adalah?", correct: "Ka Eko", wrongs: ["Ko Luq", "Ka Rizqi", "Ko Jacob"]),
+        LocalQuestion(question: "Siapa mentor yang merupakan salah satu pendiri (Co-Founder) dari aplikasi PetaNetra?", correct: "Ci Jes", wrongs: ["Ka Khoi", "Ci Valen", "Ka Afi"]),
+        LocalQuestion(question: "Tech Mentor alumni UGM yang merupakan salah satu pendiri (Co-Founder) dari Qiroah adalah?", correct: "Ka Khoi", wrongs: ["Ka Toya", "Ka Rizqi", "Ci Jes"]),
+        LocalQuestion(question: "Product Mentor lulusan University of Melbourne dan Founder dari talentgo.ai, siapakah dia?", correct: "Ci Valen", wrongs: ["Ka Ica", "Ko Wil Sjah", "Ko Hen"]),
+        LocalQuestion(question: "Siapa Tech Mentor yang memiliki hobi unik 'suka kesandung atau nabrak sendiri'?", correct: "Ko Wilchris", wrongs: ["Ko Jacob", "Ka Eko", "Ko Octa"]),
+        LocalQuestion(question: "Siapa mentor desain yang menghabiskan waktu 13 tahun tinggal di New York dari masa SMA hingga bekerja?", correct: "Ko Luq", wrongs: ["Ko Phil", "Ka Rima", "Ka Afi"]),
+        LocalQuestion(question: "Tech mentor yang punya rekam jejak karir di banyak perusahaan besar seperti Gojek, Accenture, dan LPS adalah?", correct: "Ko Jacob", wrongs: ["Ko Har", "Ka Rizqi", "Ko Wilchris"]),
+        LocalQuestion(question: "Siapa Design Mentor yang menyukai kegiatan merakit model plastik (plastic models) seperti Gundam dan Tamiya?", correct: "Ko Luq", wrongs: ["Ka Eko", "Ka Toya", "Ko Wil Sjah Sjah"]),
+        LocalQuestion(question: "Di antara mentor berikut, siapa yang merupakan alumni pertama (Cohort 1) dari Apple Developer Academy?", correct: "Ko Phil", wrongs: ["Ka Khoi", "Ci Jes", "Ko Luq"]),
+        LocalQuestion(question: "Mentor yang pernah menyelam (diving) langsung ke kedalaman 15 meter pada pengalaman pertamanya adalah?", correct: "Ko Octa", wrongs: ["Ka Ica", "Ko Hen", "Ko Har"]),
+        LocalQuestion(question: "Siapa Tech mentor yang juga memiliki hobi bermain koleksi kartu TCG Pokemon dan merawat Aquascape?", correct: "Ka Toya", wrongs: ["Ka Eko", "Ko Luq", "Ka Rizqi"]),
+    ]
+}
