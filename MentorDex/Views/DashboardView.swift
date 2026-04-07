@@ -381,7 +381,7 @@ struct DashboardView: View {
                         .font(.custom("Fredoka-Bold", size: 26))
                         .foregroundColor(Color.textPrimary)
                     
-                    Text("Answer 5 trivia questions correctly to earn up to 50 Coins! Ready to test your knowledge?")
+                    Text("Answer 5 trivia questions correctly to earn up to 15 Coins! Ready to test your knowledge?")
                         .font(.custom("Fredoka-Regular", size: 16))
                         .foregroundColor(Color.textSecondary)
                         .multilineTextAlignment(.center)

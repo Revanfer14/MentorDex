@@ -99,7 +99,7 @@ struct QuestionBank {
         LocalQuestion(question: "Siapa Tech Mentor yang memiliki hobi unik 'suka kesandung atau nabrak sendiri'?", correct: "Ko Wilchris", wrongs: ["Ko Jacob", "Ka Eko", "Ko Octa"]),
         LocalQuestion(question: "Siapa mentor desain yang menghabiskan waktu 13 tahun tinggal di New York dari masa SMA hingga bekerja?", correct: "Ko Luq", wrongs: ["Ko Phil", "Ka Rima", "Ka Afi"]),
         LocalQuestion(question: "Tech mentor yang punya rekam jejak karir di banyak perusahaan besar seperti Gojek, Accenture, dan LPS adalah?", correct: "Ko Jacob", wrongs: ["Ko Har", "Ka Rizqi", "Ko Wilchris"]),
-        LocalQuestion(question: "Siapa Design Mentor yang menyukai kegiatan merakit model plastik (plastic models) seperti Gundam dan Tamiya?", correct: "Ko Luq", wrongs: ["Ka Eko", "Ka Toya", "Ko Wil Sjah Sjah"]),
+        LocalQuestion(question: "Siapa Design Mentor yang menyukai kegiatan merakit model plastik (plastic models) seperti Gundam dan Tamiya?", correct: "Ko Luq", wrongs: ["Ka Eko", "Ka Toya", "Ko Wil Sjah"]),
         LocalQuestion(question: "Di antara mentor berikut, siapa yang merupakan alumni pertama (Cohort 1) dari Apple Developer Academy?", correct: "Ko Phil", wrongs: ["Ka Khoi", "Ci Jes", "Ko Luq"]),
         LocalQuestion(question: "Mentor yang pernah menyelam (diving) langsung ke kedalaman 15 meter pada pengalaman pertamanya adalah?", correct: "Ko Octa", wrongs: ["Ka Ica", "Ko Hen", "Ko Har"]),
         LocalQuestion(question: "Siapa Tech mentor yang juga memiliki hobi bermain koleksi kartu TCG Pokemon dan merawat Aquascape?", correct: "Ka Toya", wrongs: ["Ka Eko", "Ko Luq", "Ka Rizqi"]),

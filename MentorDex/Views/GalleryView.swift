@@ -40,7 +40,8 @@ struct GalleryView: View {
                                 GalleryThumbnail(entry: entry)
                                     .onTapGesture {
                                         playSound("click")
-                                        if entry.isUnlocked {
+                                        playHaptic(style: .medium)
+                                        if entry.isUnlocked {                         
                                             selectedEntry = entry
                                         }
                                     }

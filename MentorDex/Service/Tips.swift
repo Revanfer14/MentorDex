@@ -5,7 +5,7 @@ import TipKit
 // MARK: - 1. Quiz Tip
 struct QuizTip: Tip {
     var title: Text { Text("1. Earn Coins!") }
-    var message: Text? { Text("Play the trivia quiz to earn coins. Get up to 50 coins for a perfect score!") }
+    var message: Text? { Text("Play the trivia quiz to earn coins. Get up to 15 coins for a perfect score!") }
     var image: Image? { Image(systemName: "brain.head.profile") }
     
     // Tombol Pseudo "Next"

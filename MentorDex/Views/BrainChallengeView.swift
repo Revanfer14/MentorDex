@@ -51,8 +51,7 @@ class QuizService: ObservableObject {
         // Efek loading UI
         try? await Task.sleep(nanoseconds: 500_000_000)
         
-        // GACHA KATEGORI SOAL
-        let category = ["academy", "math", "academy", "general", "academy", "academy", "academy"].randomElement()!
+        let category = pickCategory()
         
         if category == "math" {
             self.question = generateNativeMath()
@@ -63,6 +62,19 @@ class QuizService: ObservableObject {
         }
         
         isLoading = false
+    }
+    
+    private func pickCategory() -> String {
+        let roll = Int.random(in: 1...100)
+        
+        switch roll {
+        case 1...80:
+            return "academy"
+        case 81...90:
+            return "general"
+        default:
+            return "math"
+        }
     }
     
     // Academy Questions
@@ -440,11 +452,11 @@ struct BrainChallengeView: View {
         
         switch correctAnswers {
         case 0: coinsEarned = 0
-        case 1: coinsEarned = 4
-        case 2: coinsEarned = 8
-        case 3: coinsEarned = 13
-        case 4: coinsEarned = 18
-        case 5: coinsEarned = 25
+        case 1: coinsEarned = 2
+        case 2: coinsEarned = 4
+        case 3: coinsEarned = 8
+        case 4: coinsEarned = 10
+        case 5: coinsEarned = 15
         default: coinsEarned = 0
         }
         
