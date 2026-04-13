@@ -23,22 +23,24 @@ MentorDex is a Pokémon-inspired iOS card-collecting app built for the **Apple D
 
 ```
 MentorDex/
-├── MentorDexApp.swift          # App entry point, RootView, MainTabView
-├── Info.plist                  # Custom font registration (Fredoka)
+├── MentorDexApp.swift          # App entry point
+├── Info.plist                  
 ├── Model/
-│   └── Models.swift            # Mentor, CardGrade, GalleryEntry, ChallengeTier, sample data
+│   └── Models.swift            # Model
+│   └── QuestionBank.swift      # Apple Academy's question bank
 ├── ViewModel/
-│   └── GameState.swift         # Central ObservableObject: gallery, rewards, persistence
+│   └── GameState.swift         # Game logic
 ├── Service/
-│   └── AudioManager.swift      # Singleton AVAudioPlayer with mute persistence
+│   └── AudioManager.swift      # AVAudioPlayer
+│   └── Tips.swift              # TipKit
 ├── Component/
-│   └── MentorCardFront.swift   # Shared card UI: holographic shimmer, gyro tilt, info rows
+│   └── MentorCardFront.swift   # Card component
 └── Views/
     ├── SplashView.swift         # Animated launch screen
-    ├── DashboardView.swift      # Home tab: pack selection, inventory, stats
-    ├── GalleryView.swift        # Card collection grid with detail sheet
-    ├── BrainChallengeView.swift # AI trivia quiz with timer, multi-round logic
-    └── PackOpeningView.swift    # 3D pack tear, card flip reveal, all-done summary
+    ├── DashboardView.swift      # Home screen
+    ├── GalleryView.swift        # Gallery screen
+    ├── BrainChallengeView.swift # Quiz sheet
+    └── PackOpeningView.swift    # Pack opening screen
 ```
 
 ---
@@ -47,23 +49,29 @@ MentorDex/
 
 | Tier | Pack | Cards | Common | Epic | Legendary | Special |
 |------|------|-------|--------|------|-----------|---------|
-| 1 | Starter Pack | 1 | 94% | 5% | 1% | — |
-| 2 | Pro Pack | 2 | 85% | 12% | 3% | — |
+| 1 | Starter Pack | 1 | 89% | 10% | 1% | — |
+| 2 | Pro Pack | 2 | 82% | 15% | 3% | — |
 | 3 | Legendary Pack | 3 | 85% | 10% | 5% | 1 Guaranteed Epic |
 
 > ⚠️ **Disclaimer:** The Common, Epic, and Legendary tiers purely represent in-game card rarity and are **NOT** intended to evaluate or rank the mentors' real-life performance.
 
 ---
 
-## Challenge Tiers
-
-| Tier | Mode | Win Condition |
-|------|------|---------------|
-| Tier 1 | 1 Easy question | Answer correctly |
-| Tier 2 | 3 Medium questions | Get at least 2 correct |
-| Tier 3 | 3 Hard questions | Answer all 3 in a row |
+## Questions
 
 Questions are generated on-device via **Apple Intelligence** (`LanguageModelSession`) with a structured `@Generable` schema. Native Swift math is used as a fast fallback category.
+
+There are 3 types of question:
+- General (basic knowledge)
+- Math
+- Apple Academy
+
+There will be 5 Questions in total
+- 1 Correct Answer = 2 Coins
+- 2 Correct Answer = 4 Coins
+- 3 Correct Answer = 8 Coins
+- 4 Correct Answer = 10 Coins
+- 5 Correct Answer = 15 Coins
 
 ---
 
